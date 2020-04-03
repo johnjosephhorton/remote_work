@@ -254,3 +254,111 @@ g <- ggplot(df.combo, aes(long, lat, group = group))+
     theme_bw()
 
 JJHmisc::writeImage(g, "geo", width = 8, height = 6, path = "../writeup/plots/")
+
+
+
+############################
+## Merge with State UI data 
+###########################
+
+df.ui.raw <- read.csv("../etl/state_ui.csv", stringsAsFactors = FALSE)[, c(1, 4, 5, 7, 8)]
+colnames(df.ui.raw) <- c("state", "two_week_total", "advance_3_22", "advance_3_15", "updated_3_15")
+
+df.ui <- df.ui.raw %>% 
+    melt(id.var = c("state")) %>%
+    mutate(value = as.numeric(gsub(",","", value))) %>%
+    as_tibble() %>% 
+    reshape2::dcast(state ~ variable)
+
+df.ui$state <- with(df.ui, as.character(codes[as.character(state)]))
+
+
+
+df.pops.raw <- read.csv("../etl/stat_pops.csv", stringsAsFactors = FALSE)[, c(1,3)]
+colnames(df.pops.raw) <- c("state", "population")
+
+df.pops.raw$state <- gsub("\\.", "", df.pops.raw$state)
+
+df.pops.raw$state <- with(df.pops.raw, as.character(codes[as.character(state)]))
+df.pops.raw$population <- with(df.pops.raw,  as.numeric(gsub(",","", population)))
+
+
+df.state.combo <- df.working.state %>% left_join(df.ui) %>% left_join(df.pops.raw) %>%
+    mutate(frac.unemp = two_week_total / population)
+
+ggplot(data = df.state.combo %>% filter(q == "I have recently been furloughed or laid-off"),
+       aes(x = frac, y = frac.unemp)) +
+    geom_text(aes(label = state))  +
+    geom_smooth()
+
+ggplot(data = df.state.combo %>% filter(q == "I have recently been furloughed or laid-off"),
+       aes(x = log(population), y = log(two_week_total))) +
+    geom_text(aes(label = state))  +
+    geom_smooth() +
+    theme_bw()
+
+m <- lm(log(two_week_total) ~ log(population) + frac, data = df.state.combo %>% filter(q == "I have recently been furloughed or laid-off"))
+
+m <- lm(log(two_week_total) ~ log(population) + frac, data = df.state.combo %>% filter(q == "Used to commute, now work from home"))
+
+
+
+short.name <- list("I continue to commute to work"  = "commute",
+                   "I have recently been furloughed or laid-off" = "laidoff", 
+                   "Used to commute, now work from home" = "wfh",
+                   "Used to work from home and still do" = "still_wfh", 
+                   "Used to work from home, but now I commute" = "now_commute")
+
+df.state.combo$q.short <- with(df.state.combo, as.character(short.name[as.character(q)]))
+
+
+df.reg <- df.state.combo %>% select(state, two_week_total, population, frac, q.short) %>% as_tibble %>%
+    reshape2::dcast(state + two_week_total + population ~ q.short, value.var = "frac") %>%
+    select(-now_commute)
+
+
+g <- ggplot(data = df.reg, aes(x = commute, y = wfh)) +
+    geom_point(aes(size = population), alpha = 0.25) + 
+    geom_text_repel(aes(label = state)) +
+    theme_bw() +
+    scale_x_continuous(label = scales::percent) +
+    scale_y_continuous(label = scales::percent) +
+    xlab("Still commuting to work") +
+    ylab("Now WFH") +
+    theme_bw() +
+    theme(legend.position = "none") +
+    geom_smooth(method = "lm")
+
+JJHmisc::writeImage(g, "commute_vs_wfh", width = 6, height = 6, path = "../writeup/plots/")
+
+m.commute <- lm(log(two_week_total) ~ log(population) + commute,
+        data = df.reg)
+
+m.wfh <- lm(log(two_week_total) ~ log(population) + wfh,
+        data = df.reg)
+
+m.laidoff <- lm(log(two_week_total) ~ log(population) + laidoff,
+        data = df.reg)
+
+m.still_wfh <- lm(log(two_week_total) ~ log(population) + still_wfh,
+        data = df.reg)
+
+#stargazer::stargazer(m.commute, m.wfh, m.laidoff, m.still_wfh, type = "text")
+
+out.file <- "../writeup/tables/ui.tex"
+sink("/dev/null")
+s <- stargazer::stargazer(m.commute, m.wfh, m.laidoff, m.still_wfh, 
+                          dep.var.labels = c("Log state two week UI claims"), 
+                          covariate.labels = c("Log state population", "Still commuting frac.", "Now WFH frac.", "Laid-off", "Still WFH"), 
+                          title = "Predicting UI claims by state", 
+                          label = "tab:ui",
+                          font.size = "small",
+                          omit.stat = c("ser", "f"), 
+                          type = "latex",
+                          header = FALSE)
+sink()
+note <- c("\\\\",
+          "\\begin{minipage}{1.0 \\textwidth}",
+          "{\\footnotesize \\emph{Notes}: 
+\\starlanguage}", "\\end{minipage}")
+JJHmisc::AddTableNote(s, out.file, note)
