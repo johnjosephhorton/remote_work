@@ -48,7 +48,7 @@
 
 \begin{document} 
 
-\title{Covid19 and Work-From-Home:\\ An Early Look}
+\title{Covid19 and Work-From-Home in the US:\\ An Early Look}
 
 \date{\today}
 
@@ -71,14 +71,43 @@
 The on-going \covid{} pandemic has confined large numbers of people to their homes via quarntines and shelter-in-place orders.
 Many businesses are closed. 
 There have already been enormous and unprecendented increases in workers filing unemployment insurance claims \citep{goldsmith2020}. 
-At least some workers have already been laid-off, creating the need to find alternative source of income.
 
-\section{Results}
+We conducted a survey on Google Consumer Surveys to get a sense of individual at-the-moment situation. 
 
 We launched our survey on \SurveyStart{} and collected respondents until \SurveyEnd{}. 
 We surveyed a total of \numObs{} respondents.
-Of these, \numObsWorking{} reported being in the labor force. 
+We asked a single question:
+````Have you started to work from home in the last 4 weeks?''
+which had the following response options: 
 
+\begin{enumerate} 
+\item ``I continue to commute to work''
+\item ``I have recently been furloughed or laid-off''
+\item ``None of the above / Not working for pay''
+\item ``Used to commute, now work from home''   
+\item ``Used to work from home and still do''       
+\item ``Used to work from home, but now I commute''
+\end{enumerate} 
+
+\section{Results}
+
+Of the respondents, \numObsWorking{} reported somethin other than ``None of the above / Not working for pay.''
+This gives an implied labor force participation rate of \LFPRhat{}\%, which is lower than the BLS estimate about about 62\%, but still fairly close.
+%Some of the ``None of above'' respondents could be unemployed. 
+The distribution of answers pooled over all respondents is shown in Figure~\ref{fig:working_summary}. 
+
+In Figure~\ref{fig:working_summary}, we can see that most common response was that they continue to commute, but the next most common was that they were now working from home. 
+The working from home fraction is about 35\%. 
+This is remarkably close to the estimate from \cite{dingel2020} that 34\% of jobs in the US can plausibly be performed from home.
+As we will see, there is some regional variation, though we make no attempt to account for differing regions having different job compositions. 
+
+If we take the US labor force at about 165M, with an 11\% increase in furloughs/lay-offs, the impication is about ~16M recently out of work.
+This is still considerably larger than the number who have reportedly filed for UI, as of April 1st, 2020.\footnote{
+  \url{https://www.theguardian.com/business/2020/apr/02/us-unemployment-coronavirus-economy}
+}
+
+% 165 million
+% https://fred.stlouisfed.org/series/CLF16OV
 
 \begin{figure}
   \caption{Answers to the question ``Have you started to work from home in the last 4 weeks?'', conditional upon being in the labor force from a US sample} \label{fig:working_summary}
@@ -87,29 +116,16 @@ Of these, \numObsWorking{} reported being in the labor force.
   \includegraphics[width = \linewidth]{plots/working_summary.pdf} \\
   \begin{footnotesize}
     \begin{singlespace}
-      \emph{Notes:} Standard errors are reported. 
+      \emph{Notes:} 
     \end{singlespace}
     \end{footnotesize}
 \end{minipage}
 \end{figure} 
 
+\subsection{Geographic variation} 
 
 \begin{figure}
-  \caption{Answers to the question ``Have you started to work from home in the last 4 weeks?'', conditional upon being in the labor force from a US sample} \label{fig:gender}
-\centering
-\begin{minipage}{1.0 \linewidth}
-  \includegraphics[width = \linewidth]{plots/gender.pdf} \\
-  \begin{footnotesize}
-    \begin{singlespace}
-      \emph{Notes:} Standard errors are reported. 
-    \end{singlespace}
-    \end{footnotesize}
-\end{minipage}
-\end{figure} 
-
-
-\begin{figure}
-  \caption{Answers to the question ``Have you started to work from home in the last 4 weeks?'', conditional upon being in the labor force from a US sample} \label{fig:gender}
+  \caption{US region} \label{fig:region}
 \centering
 \begin{minipage}{1.0 \linewidth}
   \includegraphics[width = \linewidth]{plots/region.pdf} \\
@@ -121,10 +137,44 @@ Of these, \numObsWorking{} reported being in the labor force.
 \end{minipage}
 \end{figure} 
 
+\begin{figure}
+  \caption{Responses by US State} \label{fig:geo}
+\centering
+\begin{minipage}{1.0 \linewidth}
+  \includegraphics[width = \linewidth]{plots/geo.pdf} \\
+  \begin{footnotesize}
+    \begin{singlespace}
+      \emph{Notes:} 
+    \end{singlespace}
+    \end{footnotesize}
+\end{minipage}
+\end{figure} 
+
 
 
 \newpage \clearpage
 \bibliographystyle{aer}
 \bibliography{remote_work.bib}
+
+
+\appendix
+
+\section{Appendix} 
+\subsection{By gender} \label{sec:gender}
+
+In Figure~\ref{fig:gender} we report responses by inferred gender.
+
+\begin{figure}
+  \caption{Responses by gender} \label{fig:gender}
+\centering
+\begin{minipage}{1.0 \linewidth}
+  \includegraphics[width = \linewidth]{plots/gender.pdf} \\
+  \begin{footnotesize}
+    \begin{singlespace}
+      \emph{Notes:} Standard errors are reported. 
+    \end{singlespace}
+    \end{footnotesize}
+\end{minipage}
+\end{figure} 
 
 \end{document} 

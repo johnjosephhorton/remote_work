@@ -17,35 +17,41 @@ suppressPackageStartupMessages({
     
 df.raw <- read.csv("../etl/gcs.csv",
                    stringsAsFactors = FALSE) 
+
 colnames(df.raw) <- c("id", "time", "status", "pub_cat", "gender", "age", "geo", "weight", "q", "response_time")
-df.raw$region <- with(df.raw, as.vector(strsplit(geo, "-"))[[2]])
-r <- sapply(places, function(x) as.vector(strsplit(x, split = "-")))
+
+
+## Add geograph information 
+r <- sapply(df.raw$geo, function(x) as.vector(strsplit(x, split = "-")))
 df.raw$region <- unlist(lapply(r, function(x) x[2]))
 df.raw$state <- unlist(lapply(r, function(x) x[3]))
 
+## Separate out workers that are out of the labor force 
 df.working <- df.raw %>% filter(q != "None of the above / Not working for pay")
 
-addParam("\\numObsWorking", nrow(df.working) %>% formatC(big.mark = ","))
-
-df.raw$time %>% max
-
+## Capture numbers from the analysis for call-out in the writeup 
 addParam <- genParamAdder("../writeup/params.tex")
+num.obs <- nrow(df.raw)
+num.obs.working <- nrow(df.working)
+lfpr <- num.obs.working / num.obs
+
+addParam("\\LFPRhat", (lfpr %>% multiply_by(100)) %>% formatC(digits = 0, format = "f"))
+
 addParam("\\numObs", nrow(df.raw) %>% formatC(big.mark = ","))
-
-
+addParam("\\numObsWorking", nrow(df.working) %>% formatC(big.mark = ","))
 addParam("\\SurveyStart", df.raw %$% time %>% min)
 addParam("\\SurveyEnd", df.raw %$% time %>% max)
 
-            
+###########
+##
+##########
+
 df.working.summary <- df.working %>%
     group_by(q) %>%
     summarise(num.obs = n()) %>%
     ungroup %>%
         mutate(frac = num.obs / sum(num.obs)) %>% 
         mutate(se = sqrt(frac * (1-frac))/sqrt(num.obs))
-
-
-         
 
 df.working.summary$q <- with(df.working.summary, reorder(q, frac, mean))
 
@@ -61,7 +67,6 @@ g <- ggplot(data = df.working.summary, aes(y = q, x = frac)) +
 
 JJHmisc::writeImage(g, "working_summary", width = 5, height = 2, path = "../writeup/plots/")
 
-print(g)
 
 
 df.working.gender <- df.working %>%
@@ -125,3 +130,107 @@ g <- ggplot(data = df.working.region %>% filter(q != "Used to work from home, bu
 JJHmisc::writeImage(g, "region", width = 6.5, height = 2.5, path = "../writeup/plots/")
 
 print(g)
+
+df.working.state <- df.working %>%
+    filter(state != "NA") %>% 
+    group_by(q, state) %>%
+    summarise(num.obs = n()) %>%
+    ungroup %>%
+    group_by(state) %>% 
+        mutate(frac = num.obs / sum(num.obs)) %>% 
+    mutate(se = sqrt(frac * (1-frac))/sqrt(num.obs)) 
+
+
+codes <- list(
+"Alabama"="AL",
+"Alaska"="AK",
+"Arizona"="AZ",
+"Arkansas"="AR",
+"California"="CA",
+"Colorado"="CO",
+"Connecticut"="CT",
+"Delaware"="DE",
+"Florida"="FL",
+"Georgia"="GA",
+"Hawaii"="HI",
+"Idaho"="ID",
+"Illinois"="IL",
+"Indiana"="IN",
+"Iowa"="IA",
+"Kansas"="KS",
+"Kentucky"="KY",
+"Louisiana"="LA",
+"Maine"="ME",
+"Maryland"="MD",
+"Massachusetts"="MA",
+"Michigan"="MI",
+"Minnesota"="MN",
+"Mississippi"="MS",
+"Missouri"="MO",
+"Montana"="MT",
+"Nebraska"="NE",
+"Nevada"="NV",
+"New Hampshire"="NH",
+"New Jersey"="NJ",
+"New Mexico"="NM",
+"New York"="NY",
+"North Carolina"="NC",
+"North Dakota"="ND",
+"Ohio"="OH",
+"Oklahoma"="OK",
+"Oregon"="OR",
+"Pennsylvania"="PA",
+"Rhode Island"="RI",
+"South Carolina"="SC",
+"South Dakota"="SD",
+"Tennessee"="TN",
+"Texas"="TX",
+"Utah"="UT",
+"Vermont"="VT",
+"Virginia"="VA",
+"Washington"="WA",
+"West Virginia"="WV",
+"Wisconsin"="WI",
+"Wyoming"="WY")
+
+ok.codes <- as.character(codes[names(codes)])
+
+lc.codes <- codes
+names(lc.codes) <- tolower(names(codes))
+
+states_map <- map_data("state")
+states_map$state <- with(states_map, as.character(lc.codes[as.character(region)]))
+
+
+df.combo <- df.working.state %>% left_join(states_map)  %>% filter(q != "Used to work from home, but now I commute")
+
+## g <- ggplot(df.combo %>% filter(q=="I continue to commute to work"), aes(long, lat, group = group))+
+##   geom_polygon(aes(fill = frac), color = "white")+
+##   scale_fill_viridis_c(option = "C")+
+##     theme_classic()
+
+## JJHmisc::writeImage(g, "continue_to_commute", width = 6, height = 4, path = "../writeup/plots/")
+
+
+
+## g <- ggplot(df.combo %>% filter(q=="Used to commute, now work from home"), aes(long, lat, group = group))+
+##   geom_polygon(aes(fill = frac), color = "white")+
+##   scale_fill_viridis_c(option = "C")+
+##     theme_classic()
+
+## JJHmisc::writeImage(g, "work_from_home", width = 6, height = 4, path = "../writeup/plots/")
+
+## g <- ggplot(df.combo %>% filter(q=="I have recently been furloughed or laid-off"), aes(long, lat, group = group))+
+##   geom_polygon(aes(fill = frac), color = "white")+
+##   scale_fill_viridis_c(option = "C")+
+##     theme_classic()
+
+g <- ggplot(df.combo, aes(long, lat, group = group))+
+    facet_wrap(~q, ncol = 2, scales = "free") + 
+  geom_polygon(aes(fill = frac), color = "white")+
+    scale_fill_viridis_c(option = "C") +
+    theme_bw()
+## +
+##     theme_classic()
+
+JJHmisc::writeImage(g, "geo", width = 8, height = 6, path = "../writeup/plots/")
