@@ -8,26 +8,12 @@ package_list.txt:
 install_packages: package_list.txt
 	cat package_list.txt | xargs -I {} Rscript -e 'install.packages("{}")'
 
-computed_objects =
+# hacky workaround until I refactor eda.R
+media.txt: ../analysis/eda.R
+	cd ../analysis && ./eda.R
+	touch media.txt
 
-tables =
-
-# tables += tables/summary_stats_panel.tex
-# tables/summary_stats_panel.tex: ../analysis/table_summary_stats_panel.R
-# 	touch -a $<
-# 	cd ../analysis && ./table_summary_stats_panel.R
-# 	cd tables && sed -i 's/\\midrule//g' summary_stats_panel.tex
-# 	cd tables && sed -i 's/NA/-/g' summary_stats_panel.tex
-# 	cd tables && echo $@ | sed 's/tables\///' | xargs -I{} texscrap -f {} --png
-
-plots =
-
-# plots += plots/country_level_outcomes.pdf
-# plots/country_level_outcomes.pdf: ../analysis/plot_country_level_outcomes.R ../computed_objects/country_application_panel.rds
-# 	touch -a $<
-# 	cd ../analysis && Rscript plot_country_level_outcomes.R
-
-$(project).pdf: $(project).bib $(project).tex $(tables) $(plots) 
+$(project).pdf: $(project).bib $(project).tex media.txt
 	pdflatex -shell-escape -interaction=nonstopmode $(project)
 	bibtex $(project)
 	pdflatex -shell-escape -interaction=nonstopmode $(project)
@@ -46,7 +32,7 @@ snapshot:
 website: $(project).pdf
 	printf 'cd papers\nput $<\n' \ | sftp -oPort=2222 johnjhorton@104.198.96.220
 
-$(project).docx:  $(project).bib $(project).tex $(plots) $(tables) $(params)
+$(project).docx:  $(project).bib $(project).tex 
 	rm -f $(project).docx
 	sed 's/\\input{tables\/\(.*\)\.tex}/\\includegraphics{tables\/\1.png}/' $(project).tex > $(project)_tables_as_images.tex
 	pandoc $(project)_tables_as_images.tex -f latex -t docx -s -o $(project).docx
