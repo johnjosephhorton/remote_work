@@ -35,6 +35,8 @@ website: $(project).pdf
 $(project).docx:  $(project).bib $(project).tex 
 	rm -f $(project).docx
 	sed 's/\\input{tables\/\(.*\)\.tex}/\\includegraphics{tables\/\1.png}/' $(project).tex > $(project)_tables_as_images.tex
+	#cd tables && sed 's/tables\///' ui.tex | xargs -I{}
+	cd tables && texscrap -f ui.tex  --png
 	pandoc $(project)_tables_as_images.tex -f latex -t docx -s -o $(project).docx
 
 backup_s3: ../backups/$(project)_$(ts).tar.gz
