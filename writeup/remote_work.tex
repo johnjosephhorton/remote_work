@@ -52,7 +52,7 @@
 
 \date{\today}
 
-\author{Erik Brynjolfsson\\Stanford \& NBER \and John Horton\\MIT \& NBER \and Daniel Rock\\MIT \and Garima Sharma\\MIT \and Hong Yi To Ye\\MIT}
+\author{Erik Brynjolfsson\\Stanford \& NBER \and John Horton\\MIT \& NBER \and Adam Ozimek\\Upwork \and Daniel Rock\\MIT \and Garima Sharma\\MIT \and Hong Yi To Ye\\MIT}
 
 \maketitle
 
@@ -99,7 +99,7 @@ The distribution of answers pooled over all respondents is shown in Figure~\ref{
 In Figure~\ref{fig:working_summary}, we can see that most common response was that they continue to commute, but the next most common was that they were now working from home. 
 The working from home fraction is about 35\%. 
 This is remarkably close to the estimate from \cite{dingel2020} that 34\% of jobs in the US can plausibly be performed from home.
-As we will see, there is some regional variation, though we make no attempt to account for differing regions having different job compositions. 
+As we will see, there is some regional variation, though we make no attempt to account for differing regions having different job compositions.
 
 If we take the US labor force at about 165M, with an 11\% increase in furloughs/lay-offs, the impication is about ~16M recently out of work.
 This is still considerably larger than the number who have reportedly filed for UI, as of April 1st, 2020.\footnote{
@@ -115,27 +115,43 @@ This is still considerably larger than the number who have reportedly filed for 
 \begin{minipage}{1.0 \linewidth}
   \includegraphics[width = \linewidth]{plots/working_summary.pdf} \\
   \begin{footnotesize}
-    \begin{singlespace}
-      \emph{Notes:} 
-    \end{singlespace}
+    %% \begin{singlespace}
+    %%   \emph{Notes:} 
+    %% \end{singlespace}
     \end{footnotesize}
 \end{minipage}
 \end{figure} 
 
+GCS also infers respondent gender.
+We analyzed responses by gender but did not find any notable differences.
+See Appendix~\ref{sec:gender}. 
+
 \subsection{Geographic variation} 
+Covid-19 has affected different parts of the US differently.
+In Figure~\ref{fig:region}, we plot the fraction of respondents choosing each answer, by region.
+GCS captures a respondents city and state, which are then mapped to the regions ``Northeast'', ``Midwest'', ``West'' and ``South.'' 
+
+In the first facet from the left, we can see that the south has the highest fraction still commuting to work and the northeast has the lowest. 
+In the second facet from the right, we can see that the northeast has the highest fraction of respondents switching to working from home, and the south the fewest.
+The northeast started from the lowest fraction working from home, though these fractions are imprecisely estimated and are all fairly similar to each other. 
+The northeast fraction now working from home is over 40\%, though the CI would just about reach the \cite{dingel2020} estimate.
 
 \begin{figure}
-  \caption{US region} \label{fig:region}
+  \caption{Responses by US region} \label{fig:region}
 \centering
 \begin{minipage}{1.0 \linewidth}
   \includegraphics[width = \linewidth]{plots/region.pdf} \\
   \begin{footnotesize}
-    \begin{singlespace}
-      \emph{Notes:} Standard errors are reported. 
-    \end{singlespace}
+%    \begin{singlespace}
+%      \emph{Notes:} Standard errors are reported. 
+%    \end{singlespace}
     \end{footnotesize}
 \end{minipage}
 \end{figure} 
+
+For a finer-grained look, we plot responses by state in Figure~\ref{fig:geo}. 
+The fraction that are still continuing to commute to work is highest in the Dakatos, Wyoming and Montana.
+The northeast, with the exception of Vermont shows large reductions in people still commuting to work. 
 
 \begin{figure}
   \caption{Responses by US State} \label{fig:geo}
@@ -150,7 +166,7 @@ This is still considerably larger than the number who have reportedly filed for 
 \end{minipage}
 \end{figure} 
 
-
+\section{Conclusion}
 
 \newpage \clearpage
 \bibliographystyle{aer}
