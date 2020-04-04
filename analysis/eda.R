@@ -316,20 +316,25 @@ df.reg <- df.state.combo %>% select(state, two_week_total, population, frac, q.s
     reshape2::dcast(state + two_week_total + population ~ q.short, value.var = "frac") %>%
     select(-now_commute)
 
+m <- lm(wfh ~ commute, data = df.reg)
 
 g <- ggplot(data = df.reg, aes(x = commute, y = wfh)) +
     geom_point(aes(size = population), alpha = 0.25) + 
     geom_text_repel(aes(label = state)) +
     theme_bw() +
-    scale_x_continuous(label = scales::percent) +
-    scale_y_continuous(label = scales::percent) +
+    scale_x_continuous(label = scales::percent_format(accuracy = 1)) +
+    scale_y_continuous(label = scales::percent_format(accuracy = 1)) +
     xlab("Still commuting to work") +
     ylab("Now WFH") +
     theme_bw() +
     theme(legend.position = "none") +
     geom_smooth(method = "lm")
 
-JJHmisc::writeImage(g, "commute_vs_wfh", width = 6, height = 6, path = "../writeup/plots/")
+JJHmisc::writeImage(g, "commute_vs_wfh", width = 6, height = 4, path = "../writeup/plots/")
+
+###############################
+## How much variance does
+#############################
 
 m.commute <- lm(log(two_week_total) ~ log(population) + commute,
         data = df.reg)
@@ -349,8 +354,9 @@ out.file <- "../writeup/tables/ui.tex"
 sink("/dev/null")
 s <- stargazer::stargazer(m.commute, m.wfh, m.laidoff, m.still_wfh, 
                           dep.var.labels = c("Log state two week UI claims"), 
-                          covariate.labels = c("Log state population", "Still commuting frac.", "Now WFH frac.", "Laid-off", "Still WFH"), 
-                          title = "Predicting UI claims by state", 
+                          covariate.labels = c("Log state population", "Still commuting frac.", "Now WFH frac.", "Laid-off frac.", "Still WFH"), 
+                          title = "Predicting UI claims by state",
+                          no.space = TRUE, 
                           label = "tab:ui",
                           font.size = "small",
                           omit.stat = c("ser", "f"), 

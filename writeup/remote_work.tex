@@ -12,6 +12,7 @@
 \usepackage{amsmath}
 \usepackage{setspace}
 \usepackage{caption}
+\usepackage{epigraph}
 
 \usepackage[super]{nth}  
 \hypersetup{
@@ -27,7 +28,7 @@
 
 \newcommand{\starlanguage}{Significance indicators: $p \le 0.05:*$, $p \le 0.01:**$ and $p \le .001:***$.}
 
-\newcommand{\covid}{Covid-19}  
+\newcommand{\covid}{COVID-19}  
 
 \newtheorem{proposition}{Proposition}
 \newtheorem{assumption}{Assumption}
@@ -43,35 +44,55 @@
 
 \begin{document} 
 
-\title{Covid19 and Work-From-Home in the US:\\ An Early Look}
+\title{COVID-19 and Remote Work:\\ An Early Look at US Data}
+
+\date{Very Preliminary \\ \today}
 
 \date{\today}
 
 \author{Erik Brynjolfsson\\Stanford \& NBER \and John Horton\footnote{
-    MIT's COUHS ruled this project as expempt (number E-2075). 
+    MIT's COUHES ruled this project as exempt (number E-2075).
+    Code and Data here: \href{https://github.com/johnjosephhorton/remote_work/}{https://github.com/johnjosephhorton/remote\_work/}.
+    If you have questions, please email us.
   }\\MIT \& NBER \and Adam Ozimek\\Upwork \and Daniel Rock\\MIT \and Garima Sharma\\MIT \and Hong Yi Tu Ye\\MIT}
+
 
 \maketitle
 
 \begin{abstract}
-  \noindent The on-going \covid{} pandemic has confined large numbers of people to their homes and caused unprecedented lay-offs.
-  Of those previously employed, \LaidOff{}\% (95\% CI is [\LaidOffLB,\LaidOffUB]), report being laid-off our furloughed in the last 4 weeks.
-  Among the same sample, \WFH{}\% (95\% CI is [\WFHLB,\WFHUB]), they were previously commuting and are now working from home.
-  The percentage already working from home pre-Covid-19 is \alreadyWFH{}\% (95\% CI is [\alreadyWFHLB,\alreadyWFHUB]). 
-  We document substantial geographic variation in responses, particularly with the fraction now working from home. 
+  \noindent 
+  We report the results of a nationally representative sample of the US population on how they are adapting to the \covid{} pandemic.
+  The survey was started on April 1, 2020 and is on-going.
+  Of those previously employed, \LaidOff{}\% (95\% CI is [\LaidOffLB,\LaidOffUB]), report being laid-off or furloughed in the last 4 weeks;
+  \WFH{}\% (95\% CI is [\WFHLB,\WFHUB]) report they were previously commuting and are now working from home.
+  %The percentage already working from home pre-Covid-19 is \alreadyWFH{}\% (95\% CI is [\alreadyWFHLB,\alreadyWFHUB]). 
+  We document substantial state-level geographic variation in responses.
+  There is a strong negative relationship between the fraction in a state still commuting to work and the fraction working from home. 
+  It seems probable that many workers currently commuting could be converted to remote workers. 
+  However, using data on state UI claims, we find that states with higher fractions of workers still commuting have lower-than-expected UI claims; states with more newly remote workers have higher-than-expected UI claims.
 %  The timing of singups is consistent with 
   \newline 
 %% \noindent JEL J01, J24, J3 \newline 
 %% keywords: bargaining, match formation, wage determination
 \end{abstract} 
 
+
 \onehalfspacing 
 
 \section{Introduction}
+  \noindent {\color{red} Preliminary! Please contact us before relying on these numbers.} \\
+  \noindent {\color{red} Latest draft: \href{https://www.john-joseph-horton.com/papers/remote\_work.pdf}{https://www.john-joseph-horton.com/papers/remote\_work.pdf}} \newline
+  \noindent {\color{red} Code \& Data (please use): \href{https://github.com/johnjosephhorton/remote\_work/}{https://github.com/johnjosephhorton/remote\_work/}} \newline
+  {\color{red} \rule{\linewidth}{0.5mm}}
+
 The on-going \covid{} pandemic has confined large numbers of people to their homes via quarantines and shelter-in-place orders.
 Large numbers of businesses are closed. 
 There have already been enormous and unprecedented increases in workers filing unemployment insurance claims \citep{goldsmith2020}. 
-To get a real-time sense of how firms and workers are responding, we conducted a Google Consumer Surveys (GCS). 
+To get a real-time sense of how firms and workers are responding, we conducted a Google Consumer Surveys (GCS).\footnote{
+GCS is a relatively low-cost tool for rapidly collecting responses to simple questions \cite{stephens2014hands}. 
+GCS charges \$0.05 per response for a single question, substantially less than professional survey firms charge for more complicated products, and response representativeness is often comparable to similar alternatives \citep{santoso2016survey, brynjolfsson2019using}.
+}
+
 We asked a single question:
 ````Have you started to work from home in the last 4 weeks?''
 with the following response options: 
@@ -89,7 +110,7 @@ So far, we have surveyed a total of \numObs{} respondents.
 
 \section{Results}
 
-Of the respondents, \numObsWorking{} reported something other than ``None of the above / Not working for pay.''
+Of the respondents, \numObsWorking{} reported something other than ``None of the above...''
 This gives an implied employment rate of \LFPRhat{}\%, which is slightly lower than the BLS estimate of about 60\%.\footnote{
   \url{https://fred.stlouisfed.org/series/EMRATIO}
 }
@@ -99,26 +120,26 @@ The distribution of answers pooled over all respondents is shown in Figure~\ref{
 We can see that the most common response from workers was that they continue to commute, at \stillCommute{}\% (95\% CI is [\stillCommuteLB,\stillCommuteUB]). 
 But the next most common was that they were now working from home. 
 
-The \emph{now} working from home fraction is about \WFH{}\%.
-\cite{dingel2020} that 34\% of jobs in the US can plausibly be performed from home. 
-However, we a substantial fraction were already working from home in they survey: \alreadyWFH{}\% reporting they were already working from home pre-Covid-19.
-The ATUS release has 23.7\% working from home on an average day, though our question implies working from home all the time; the from home only fraction in the ATUS is 18.2\%. 
-Our \WFH{}\% is also broadly consistent with the ``Freelancing in American Survey'' that reported 16.8\% report doing most of all of their work remote \citep{upwork2019}, though this included people working from co-working spaces, coffee shomes, homes and so on.
-The Census 2019 gives 5.3\% as ``working from home some'' so there is clearly lot of respondent uncertainty about what precisely various questions mean. 
+The \emph{now} working from home fraction is about \WFH{}\%, suggestintg the \cite{dingel2020} estimate of 34\% is an underestimate, as we observe that a substantial fraction were already working from home: \alreadyWFH{}\% reporting they were already working from home pre-COVID-19.\footnote{
+
+
+  
+
+  
+The ATUS release has 23.7\% working from home on an average day, though our question implies working from home all the time; the from-home-only fraction in the ATUS is 18.2\%. 
+Our \WFH{}\% is also broadly consistent with the ``Freelancing in American Survey'' that reported 16.8\% report doing most of all of their work remote \citep{upwork2019}, though this included people working from co-working spaces, coffee shops, homes and so on.
+The Census 2019 gives 5.3\% as ``working from home some'' so there is clearly lot of respondent uncertainty about what precisely various questions mean.
+}
 %The BLS reported fraction is TK. 
-
 % As we will see, there is some regional variation, though we make no attempt to account for differing regions having different job compositions.
-
-
-
 % upwork2019,
 
-If we take the US labor force at about 165M, with an 11\% increase in furloughs/lay-offs, the implication is about 16M Americans recently out of work.
-The total UI filings for the last to weeks adds up to 9.9M.\footnote{
+If we take the US labor force at about 165M, with an 11\% increase in furloughs/lay-offs, the implication is about 16M Americans are recently out of work.
+The total UI filings for the last two weeks adds up to 9.9M.\footnote{
   \url{https://www.dol.gov/ui/data.pdf}
 }
 However, not all unemployed have yet filed for unemployment.
-Given the decline in hiring, Prof. Wolfers estimates we are dealing with about 16M unemployed, which matches our point estimate.\footnote{
+Given the decline in hiring, Prof. Wolfers estimates we are dealing with about 16M unemployed, which matching our point estimate.\footnote{
   \url{https://www.nytimes.com/2020/04/03/upshot/coronavirus-jobless-rate-great-depression.html}
 }
 
@@ -143,14 +164,14 @@ We analyzed responses by gender but did not find any notable differences.
 See Appendix~\ref{sec:gender} for this analysis. 
 
 \subsection{Geographic variation} 
-Covid-19 has affected different parts of the US differently, with the main epicenter being NYC. 
+COVID-19 has affected various parts of the US differently, with the main epicenter in New York City.
 In Figure~\ref{fig:region}, we plot the fraction of respondents choosing each answer, by region.
-GCS captures a respondents city and state, which are then mapped to the regions ``Northeast'', ``Midwest'', ``West'' and ``South.'' 
+GCS captures a respondent's city and state, which are then mapped to the regions ``Northeast'', ``Midwest'', ``West'' and ``South.'' 
 
-In the first facet from the left, we can see that the south has the highest fraction still commuting to work and the northeast has the lowest. 
-In the second facet from the right, we can see that the northeast has the highest fraction of respondents switching to working from home, and the south the fewest.
-The northeast started from the lowest fraction working from home, though these fractions are imprecisely estimated and are all fairly similar to each other. 
-The northeast fraction now working from home is over 40\%, though the CI would just about reach the \cite{dingel2020} estimate.
+In the first facet from the left, we can see that the South has the highest fraction still commuting to work and the Northeast has the lowest. 
+In the second facet from the right, we can see that the Northeast has the highest fraction of respondents switching to working from home, and the South the fewest.
+The Northeast started from the lowest fraction working from home, though these fractions are imprecisely estimated and are all fairly similar to each other. 
+The Northeast fraction now working from home is over 40\%. 
 
 \begin{figure}
   \caption{Responses by US region} \label{fig:region}
@@ -168,9 +189,9 @@ The northeast fraction now working from home is over 40\%, though the CI would j
 For a finer-grained look, we plot responses by state in Figure~\ref{fig:geo}.
 It is important to keep in mind that some of these point estimates are fairly imprecise.
 
-The fraction that are still continuing to commute to work is highest in the Dakotas, Wyoming and Montana.
-There is still a substantial fraction in the south continuing to commute. 
-The northeast, with the exception of Vermont, shows large reductions in people still commuting to work. 
+The fraction of workers that are still continuing to commute to work is highest in the Dakotas, Wyoming and Montana.
+There is still a substantial fraction in the South continuing to commute. 
+The Northeast, with the exception of Vermont, shows large reductions in people still commuting to work. 
 
 \begin{figure}
   \caption{Responses by US State} \label{fig:geo}
@@ -185,15 +206,14 @@ The northeast, with the exception of Vermont, shows large reductions in people s
 \end{minipage}
 \end{figure} 
 
-Figure~\ref{fig:commute_v_wfh} we plot the fraction of working from home versus the fraction still commuting, by US state.
-There is a clear negative relationship.
-Each 10 percentage point increase in the fraction still working is associated with about 6 percentage point fewer workers now working from home.
-It seems probable that a few substantial fraction of workers that are currently commuting could still be transitioned to work-from-home status. 
+In Figure~\ref{fig:commute_vs_wfh} we plot the fraction of respondents working from home versus the fraction still commuting by US state.
+There is a clear negative relationship, suggesting a fraction of current commuters will likely---or could---transition to work-from-home status.
+Each 10 percentage point increase in the fraction still commuting is associated with about a 6 percentage point decline in the fraction fo workers now working from home. 
 
 \begin{figure}
   \caption{Still commuting versus work from home fractions by US State} \label{fig:commute_vs_wfh}
 \centering
-\begin{minipage}{1.0 \linewidth}
+\begin{minipage}{0.8 \linewidth}
   \includegraphics[width = \linewidth]{plots/commute_vs_wfh.pdf} \\
   \begin{footnotesize}
     %% \begin{singlespace}
@@ -203,16 +223,34 @@ It seems probable that a few substantial fraction of workers that are currently 
 \end{minipage}
 \end{figure} 
 
-In Table~\ref{tab:ui}, we combine our data with the two UI claims from \citep{goldsmith2020}.
-We regress the log two week UI claims by state on the state population, plus the state-specific fraction for each of responses.  
+A natural question is how these various measures are affecting UI claims by state. 
+In Table~\ref{tab:ui}, we combine our data with the two UI claims from \cite{goldsmith2020}.
+We regress the log of two weeks of UI claims by state on the state population, plus the state-specific fraction for each of the response possibilities.  
+Unsurprisingly, across all specifications, the state population explains a great deal of the variance in UI claims.
+Our interest is in whether and the various survey measures account for some amount of the residual variance.
 
 \input{tables/ui.tex}
 
+In Column~(1), we append the state-specific fraction reporting that they were still commuting to work.
+The higher the fraction reporting still commuting, the lower UI claims for that state.
+In Column~(2), the greater the fraction that report workin from home, the \emph{higher} the UI claims.
+What seems likely is that workers who would otherwise be continuing to commute to work are splitting into (a) work-from-home or (b) filing for UI.
+As states reduce the fraction commuting, we should be able to get a sense of thse resulting increases UI filings. 
 
 \section{Conclusion}
-We document some early facts about how the US labor force is responding to Covid-19 pandemic.
+We document some early facts about how the US labor force is responding to COVID-19 pandemic.
 We will continue to track changes to the nature of remote work, asking how pandemic-induced changes transform workplaces in the short and long-term.
-  
+
+\subsection{Suggested immediate future work} 
+
+The code and data for this project are here: 
+\begin{itemize}
+\item See if state-specific occupational distributions are affecting the fractions working remotely vesus splitting in UI. 
+\item See if Covid-19 deaths/hospitalizations are affecting 
+\item Someone should be able to make predictions about UI claims in states that shift more of their workforce.
+\end{itemize}
+
+
 \newpage \clearpage
 \bibliographystyle{aer}
 \bibliography{remote_work.bib}
@@ -224,7 +262,7 @@ We will continue to track changes to the nature of remote work, asking how pande
 \subsection{By gender} \label{sec:gender}
 
 In Figure~\ref{fig:gender} we report responses by inferred gender.
-Fractions are computd separately for males and females, and then a slope graph is used to show differences. 
+Fractions are computed separately for males and females, and then a slope graph is used to show differences. 
 
 \begin{figure}
   \caption{Responses by gender} \label{fig:gender}
