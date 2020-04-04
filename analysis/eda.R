@@ -18,7 +18,7 @@ suppressPackageStartupMessages({
 # for geo plots
 ratio <- 6/12
 
-df.raw <- read.csv("../etl/gcs.csv",
+df.raw <- read.csv("../etl/gcs-apr4.csv",
                    stringsAsFactors = FALSE) 
 
 colnames(df.raw) <- c("id", "time", "status", "pub_cat",
@@ -50,6 +50,26 @@ addParam("\\numObs", nrow(df.raw) %>% formatC(big.mark = ","))
 addParam("\\numObsWorking", nrow(df.working) %>% formatC(big.mark = ","))
 addParam("\\SurveyStart", df.raw %$% time %>% min %>% as.Date %>% as.character)
 addParam("\\SurveyEnd", df.raw %$% time %>% max %>% as.Date %>% as.character)
+
+
+########################################
+## Any evidence of a trend in responses? 
+########################################
+
+min.time <- df.raw %$% time %>% min
+df.raw %<>% mutate(t = difftime(time, min.time, units = "days") %>% as.numeric)
+
+ggplot(data = df.raw, aes(x = t,
+                          y = as.numeric(I(q == "I have recently been furloughed or laid-off")))) +
+    geom_point() + 
+    geom_smooth()
+
+m.laidoff <- lm(I(q == "I have recently been furloughed or laid-off") ~ t, data =df.raw)
+m.wfh <- lm(I(q == "Used to commute, now work from home") ~ t, data =df.raw)
+
+stargazer::stargazer(m.laidoff, m.wfh, data = df.raw, type = "text")
+
+
 
 ####################
 ## Overall responses 
