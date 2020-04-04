@@ -14,7 +14,10 @@ suppressPackageStartupMessages({
     library(scales)
     library(JJHmisc)
 })
-    
+
+# for geo plots
+ratio <- 6/12
+
 df.raw <- read.csv("../etl/gcs.csv",
                    stringsAsFactors = FALSE) 
 
@@ -253,8 +256,59 @@ g <- ggplot(df.combo, aes(long, lat, group = group))+
     scale_fill_viridis_c(option = "C") +
     theme_bw()
 
-JJHmisc::writeImage(g, "geo", width = 8, height = 6, path = "../writeup/plots/")
 
+
+
+JJHmisc::writeImage(g, "geo", width = 8, height = 8*ratio, path = "../writeup/plots/")
+
+
+short.name <- list("I continue to commute to work"  = "commute",
+                   "I have recently been furloughed or laid-off" = "laidoff", 
+                   "Used to commute, now work from home" = "wfh",
+                   "Used to work from home and still do" = "still_wfh", 
+                   "Used to work from home, but now I commute" = "now_commute")
+
+
+
+df.combo <- df.working.state %>%
+    left_join(states_map, by = "state")  %>%
+    filter(q == "I continue to commute to work")
+        
+g <- ggplot(df.combo, aes(long, lat, group = group))+
+    geom_polygon(aes(fill = frac), color = "white")+
+    scale_fill_viridis_c(option = "C") +
+    theme_bw()
+
+JJHmisc::writeImage(g, "geo_still_commuting",
+                            width = 8, height = 8*ratio, path = "../writeup/plots/")
+
+df.combo <- df.working.state %>%
+    left_join(states_map, by = "state")  %>%
+    filter(q == "Used to commute, now work from home")
+        
+g <- ggplot(df.combo, aes(long, lat, group = group))+
+    geom_polygon(aes(fill = frac), color = "white")+
+    scale_fill_viridis_c(option = "C") +
+    theme_bw()
+
+JJHmisc::writeImage(g, "geo_wfh",
+                            width = 8, height = 8*ratio, path = "../writeup/plots/")
+
+
+df.combo <- df.working.state %>%
+    left_join(states_map, by = "state")  %>%
+    filter(q == "I have recently been furloughed or laid-off")
+        
+g <- ggplot(df.combo, aes(long, lat, group = group))+
+    geom_polygon(aes(fill = frac), color = "white")+
+    scale_fill_viridis_c(option = "C") +
+    theme_bw()
+
+JJHmisc::writeImage(g, "geo_laidoff",
+                            width = 8, height = 8*ratio, path = "../writeup/plots/")
+
+
+    
 
 
 ############################
@@ -271,6 +325,8 @@ df.ui <- df.ui.raw %>%
     reshape2::dcast(state ~ variable)
 
 df.ui$state <- with(df.ui, as.character(codes[as.character(state)]))
+
+
 
 
 
@@ -297,17 +353,10 @@ ggplot(data = df.state.combo %>% filter(q == "I have recently been furloughed or
     geom_smooth() +
     theme_bw()
 
-m <- lm(log(two_week_total) ~ log(population) + frac, data = df.state.combo %>% filter(q == "I have recently been furloughed or laid-off"))
+m <- lm(log(two_week_total) ~ log(population) + log(frac), data = df.state.combo %>% filter(q == "I have recently been furloughed or laid-off"))
 
-m <- lm(log(two_week_total) ~ log(population) + frac, data = df.state.combo %>% filter(q == "Used to commute, now work from home"))
+m <- lm(log(two_week_total) ~ log(population) + log(frac), data = df.state.combo %>% filter(q == "Used to commute, now work from home"))
 
-
-
-short.name <- list("I continue to commute to work"  = "commute",
-                   "I have recently been furloughed or laid-off" = "laidoff", 
-                   "Used to commute, now work from home" = "wfh",
-                   "Used to work from home and still do" = "still_wfh", 
-                   "Used to work from home, but now I commute" = "now_commute")
 
 df.state.combo$q.short <- with(df.state.combo, as.character(short.name[as.character(q)]))
 
@@ -336,16 +385,16 @@ JJHmisc::writeImage(g, "commute_vs_wfh", width = 6, height = 4, path = "../write
 ## How much variance does
 #############################
 
-m.commute <- lm(log(two_week_total) ~ log(population) + commute,
+m.commute <- lm(log(two_week_total) ~ log(population) + log(commute),
         data = df.reg)
 
-m.wfh <- lm(log(two_week_total) ~ log(population) + wfh,
+m.wfh <- lm(log(two_week_total) ~ log(population) + log(wfh),
         data = df.reg)
 
-m.laidoff <- lm(log(two_week_total) ~ log(population) + laidoff,
+m.laidoff <- lm(log(two_week_total) ~ log(population) + log(laidoff),
         data = df.reg)
 
-m.still_wfh <- lm(log(two_week_total) ~ log(population) + still_wfh,
+m.still_wfh <- lm(log(two_week_total) ~ log(population) + log(still_wfh),
         data = df.reg)
 
 #stargazer::stargazer(m.commute, m.wfh, m.laidoff, m.still_wfh, type = "text")
@@ -354,7 +403,7 @@ out.file <- "../writeup/tables/ui.tex"
 sink("/dev/null")
 s <- stargazer::stargazer(m.commute, m.wfh, m.laidoff, m.still_wfh, 
                           dep.var.labels = c("Log state two week UI claims"), 
-                          covariate.labels = c("Log state population", "Still commuting frac.", "Now WFH frac.", "Laid-off frac.", "Still WFH"), 
+                          covariate.labels = c("Log state population", "Still commuting frac. (log)", "Now WFH frac. (log)", "Laid-off frac. (log)", "Still WFH (log)"), 
                           title = "Predicting UI claims by state",
                           no.space = TRUE, 
                           label = "tab:ui",
