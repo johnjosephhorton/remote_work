@@ -8,6 +8,7 @@ package_list.txt:
 install_packages: package_list.txt
 	cat package_list.txt | xargs -I {} Rscript -e 'install.packages("{}")'
 
+
 # hacky workaround until I refactor eda.R
 media.txt: ../analysis/eda.R
 	cd ../analysis && ./eda.R
@@ -29,21 +30,14 @@ snapshot:
 	@echo Timestamp is $(ts)
 	cp $(project).pdf ../snapshots/$(project)_$(ts).pdf
 
-website: $(project).pdf
-	printf 'cd papers\nput $<\n' \ | sftp -oPort=2222 johnjhorton@104.198.96.220
-
 $(project).docx:  $(project).bib $(project).tex 
 	rm -f $(project).docx
 	sed 's/\\input{tables\/\(.*\)\.tex}/\\includegraphics{tables\/\1.png}/' $(project).tex > $(project)_tables_as_images.tex
-	#cd tables && sed 's/tables\///' ui.tex | xargs -I{}
 	cd tables && texscrap -f ui.tex  --png
 	pandoc $(project)_tables_as_images.tex -f latex -t docx -s -o $(project).docx
 
-backup_s3: ../backups/$(project)_$(ts).tar.gz
-	aws s3 cp ../backups/$(project)_$(ts).tar.gz s3://john_horton_backups/
-
 toread: $(project).pdf
-	scp $(project).pdf bandit-local.local:~/Dropbox/toread/$(project)_$(ts).pdf
+	scp $(project).pdf $(DBMACHINE):~/Dropbox/toread/$(project)_$(ts).pdf
 
 purge:
 	cd plots && mv *pdf *png unused/
@@ -51,3 +45,10 @@ purge:
 
 clean:
 	rm *.aux *.log *.out *.bbl *.blg *.dvi *.aux *.fff *.lof *.out 
+
+
+website: $(project).pdf
+	printf 'cd papers\nput $<\n' \ | sftp -oPort=2222 $(WPUSERNAME)@$(WPIP)
+
+backup_s3: ../backups/$(project)_$(ts).tar.gz
+	aws s3 cp ../backups/$(project)_$(ts).tar.gz s3://$(S3BUCKET)/
