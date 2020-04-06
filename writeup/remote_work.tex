@@ -44,6 +44,8 @@
 
 \begin{document} 
 
+
+
 \title{COVID-19 and Remote Work:\\ An Early Look at US Data\footnote{
     MIT's COUHES ruled this project exempt (project number E-2075).
     Thanks to Sam Lord for helpful comments. 
@@ -52,7 +54,6 @@
 \date{Very Preliminary \\ \today}
 
 \date{\today}
-
 
 \author{Erik Brynjolfsson\\MIT, Stanford \& NBER \and John Horton\\MIT \& NBER \and Adam Ozimek\\Upwork \and Daniel Rock\\MIT \and Garima Sharma\\MIT \and Hong Yi Tu Ye\\MIT}
 
@@ -64,13 +65,9 @@
   We report the results of a nationally representative sample of the US population on how they are adapting to the \covid{} pandemic.
   The survey ran from April 1-4, 2020.
   Of those previously employed, \WFH{}\% report they were commuting and are now working from home.
-  The 95\% confidence interval (CI) is [\WFHLB,\WFHUB]. 
-  In addition, \LaidOff{}\% [\LaidOffLB,\LaidOffUB]report being laid-off or furloughed in the last 4 weeks.   
+  In addition, \LaidOff{}\% report being laid-off or furloughed in the last 4 weeks.   
   %The percentage already working from home pre-\covid{} is \alreadyWFH{}\% (95\% CI is [\alreadyWFHLB,\alreadyWFHUB]). 
-  There is a strong negative relationship between the fraction in a state still commuting to work and the fraction working from home. 
-  It seems probable that many workers currently commuting could be converted to remote workers. 
-  However, using data on state unemployment insurance (UI) claims, we find that states with higher fractions of workers still commuting have lower-than-expected UI claims;
-  states with more newly remote workers have higher-than-expected UI claims.
+  There is a strong negative relationship between the fraction in a state still commuting to work and the fraction working from home which suggests that many workers currently commuting could be converted to remote workers. Furthermore, using data on state unemployment insurance (UI) claims, we find that states with higher fractions of remote workers have higher-than-expected UI claims.
 %  The timing of singups is consistent with 
   \newline 
 %% \noindent JEL J01, J24, J3 \newline 
@@ -106,7 +103,9 @@ with the following response options:
 \end{enumerate} 
 
 We launched our survey on \SurveyStart{}; this report includes responses up until \SurveyEnd{}. 
-So far, we have surveyed a total of \numObs{} respondents.
+So far, we have surveyed a total of \numObs{} respondents.  
+
+We find that over 1/3 of workers have responded to the virus by shifting to remote work, while another 11\% have been laid-off or furloughed. There is a great deal of variation across states in the share of people switching to remote work, reflecting both the incidence of COVID. Younger people were more likely than older people to switch from commuting to remote work.
 
 \section{Results}
 
@@ -232,6 +231,9 @@ Each 10 percentage point increase in the fraction still commuting is associated 
 \end{minipage}
 \end{figure} 
 
+Table~\ref{tab:remotework} documents heterogeneity in the incidence of COVID (measured as the log of cases per 100,000 individuals\footnote{Data accessed on April 5, 2020 from The New York Times website: https://www.nytimes.com/interactive/2020/us/coronavirus-us-cases.html\#states}) as being strongly positively predictive of switching to remote work and negatively predictive of continuing to commute.
+\input{writeup/tables/covid_remotework_apr5_formatted}
+
 A natural question is how these various measures are affecting UI claims by state. 
 In Table~\ref{tab:ui}, we combine our data with that on UI claims from \cite{goldsmith2020}.
 We regress the log of two weeks of UI claims in a state on the state's population and the log state-specific fraction for each of the response possibilities.  
@@ -246,6 +248,7 @@ In Column~(2), the greater the fraction that reports working from home, the \emp
 What seems likely is that workers who would otherwise be continuing to commute to work are splitting into (a) work-from-home or (b) filing for UI.
 As states impose further restrictions on mobility, we should be able to get a sense of the resulting increases in UI filings based on how many workers can be successfully transitioned to remote work. 
 Surprisingly, Column~(3), which includes a direct measure of reported lay-offs has the ``right'' sign, but is small in magnitude.
+%How much of this is due to Michigan - a potential outlier? Or other state-specific effects?
 We will investigate this further.
 
 \section{Conclusion}
@@ -258,6 +261,7 @@ We will continue to track changes to the nature of remote work, asking how pande
 \item How are state-specific occupational distributions affecting the share of workers able to perform remote work? And to what effect on the UI system? 
 \item Are COVID-19 deaths/hospitalizations affecting the adoption of remote work down the distribution of occupations based upon their ``remote-ability''? What are the implications for productivity?
 \item Can we predict how UI claims evolve in states based on how much of the workforce they can successfully shift to remote work? 
+\item What percentage of tasks can be done remotely and how does it vary across professions and industries? Can we also observe (and explain) heterogeneity across states? These task specific questions will be the focus of our next round of surveys. 
 \end{itemize}
 
 The code and data for this project are here:
@@ -275,7 +279,7 @@ The code and data for this project are here:
 \subsection{By gender} \label{sec:gender}
 
 In Figure~\ref{fig:gender} we report responses by inferred gender.
-Fractions are computed separately for males and females, and then a slope graph is used to show differences. 
+Fractions are computed separately for males and females, and then a slope graph is used to show differences. Within all questions at a 95\% confidence interval, the differences between gender are not statistically significant. Within our sample, however, it appears that men were modestly more likely to continue to commute to work, and likewise women more were more likely to report switching from commuter to work from home status. Men were also slightly more likely to have been recently furloughed or laid-off. Consistently working from home workers show little different in gender composition.
 
 \begin{figure}
   \caption{Responses by gender} \label{fig:gender}
@@ -291,8 +295,9 @@ Fractions are computed separately for males and females, and then a slope graph 
 \end{figure} 
 
 
-In Figure~\ref{fig:by_age} we report responses by inferred age. 
+In Figure~\ref{fig:by_age} we report responses by inferred age. A similar proportion of workers continue to commute to work across all age groups, as is also the case for the recently furloughed or laid-off worker contingent. On the other hand, the proportion of respondents that has recently converted from commuting to work to remote work steadily declines from the 25-34 age group to the 65 and older category. The differences between the 25-34 age group and the 65 and older group are statistically significant, and, as Figure~\ref{fig:by_age} shows, younger workers (above age 25) are more likely to have been converted to work from home from commuting. 
 
+Survey respondents in older age groups also reported \emph{remaining} working remotely with greater propensities. These results are directionally consistent with the 2019 Census~\cite{ACSTableB08101}, though our estimates are larger. The differences may arise from a difference in the question asked. The Census asks about how workers get to work. The 2019 Upwork "Freelancing in America" study found younger workers were modestly \emph{more} likely to work mostly or entirely from home~\cite{upwork2019}. It's possible that our survey is somewhere in between, grouping people who do some work at home with those who are fully committed remote labor. We will investigate further in future work.
 \begin{figure}
   \caption{Responses by inferred age} \label{fig:by_age}
 \centering
