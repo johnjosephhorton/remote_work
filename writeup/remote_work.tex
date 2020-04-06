@@ -46,10 +46,11 @@
 
 \title{COVID-19 and Remote Work:\\ An Early Look at US Data\footnote{
     MIT's COUHES ruled this project exempt (project number E-2075).
+    {Code \& Data: \href{https://github.com/johnjosephhorton/remote\_work/}{https://github.com/johnjosephhorton/remote\_work/}}.
     Thanks to Sam Lord for helpful comments. 
-  } \\  {\color{red} PRELIMINARY - COMMENTS WELCOME}}
+  }}
 
-\date{Very Preliminary \\ \today}
+\date{\today}
 
 \date{\today}
 
@@ -66,26 +67,16 @@
   Of those previously employed, \WFH{}\% report they were commuting and are now working from home.
   The 95\% confidence interval (CI) is [\WFHLB,\WFHUB]. 
   In addition, \LaidOff{}\% [\LaidOffLB,\LaidOffUB]report being laid-off or furloughed in the last 4 weeks.   
-  %The percentage already working from home pre-\covid{} is \alreadyWFH{}\% (95\% CI is [\alreadyWFHLB,\alreadyWFHUB]). 
   There is a strong negative relationship between the fraction in a state still commuting to work and the fraction working from home. 
   It seems probable that many workers currently commuting could be converted to remote workers. 
   However, using data on state unemployment insurance (UI) claims, we find that states with higher fractions of workers still commuting have lower-than-expected UI claims;
   states with more newly remote workers have higher-than-expected UI claims.
-%  The timing of singups is consistent with 
   \newline 
-%% \noindent JEL J01, J24, J3 \newline 
-%% keywords: bargaining, match formation, wage determination
 \end{abstract} 
-
 
 \onehalfspacing 
 
 \section{Introduction}
-  \noindent {\color{red} Preliminary: Please contact us before relying on these numbers.} \\
-  \noindent {\color{red} Latest draft: \href{https://www.john-joseph-horton.com/papers/remote\_work.pdf}{https://www.john-joseph-horton.com/papers/remote\_work.pdf}} \newline
-  \noindent {\color{red} Code \& Data (please use): \href{https://github.com/johnjosephhorton/remote\_work/}{https://github.com/johnjosephhorton/remote\_work/}} \newline
-  {\color{red} \rule{\linewidth}{0.5mm}}
-
 The on-going \covid{} pandemic has confined large numbers of people to their homes via quarantines and shelter-in-place orders.
 Large numbers of businesses are closed. 
 There have already been enormous and unprecedented increases in workers filing unemployment insurance claims \citep{goldsmith2020}. 
@@ -105,8 +96,8 @@ with the following response options:
 \item ``None of the above / Not working for pay''
 \end{enumerate} 
 
-We launched our survey on \SurveyStart{}; this report includes responses up until \SurveyEnd{}. 
-So far, we have surveyed a total of \numObs{} respondents.
+We launched our survey on \SurveyStart{} and collected responses until \SurveyEnd{}. 
+We collected a total of \numObs{} responses.
 
 \section{Results}
 
@@ -114,7 +105,7 @@ Of the respondents, \numObsWorking{} reported something other than ``None of the
 This gives an implied employment rate of \LFPRhat{}\%, which is slightly lower than the BLS estimate of about 60\%.\footnote{
   \url{https://fred.stlouisfed.org/series/EMRATIO}
 }
-We restrict our sample those reporting being employed 4 weeks prior.
+For the rest our analysis, we restrict our sample those reporting being employed four weeks prior.
 
 The distribution of answers pooled over all respondents is shown in Figure~\ref{fig:working_summary}. 
 We can see that the most common response from workers was that they continue to commute, at \stillCommute{}\% (95\% CI is [\stillCommuteLB,\stillCommuteUB]). 
@@ -130,7 +121,7 @@ At the lowest end, the 2019 Census reports 5.3\% of workers as ``working from ho
 The wide range in answers suggests respondent uncertainty about the precise meaning of questions. Nevertheless, our results lie well within the existing estimates.
 }
 
-If we take the US labor force at about 165 million, an 11\% increase in furloughs/lay-offs implies that about 16M Americans are recently out of work.
+If we take the US labor force at about 165 million, an 11\% increase in furloughs/lay-offs implies that about 16 million Americans are recently out of work.
 The total UI filings for the last two weeks adds up to 9.9 million.\footnote{
   \url{https://www.dol.gov/ui/data.pdf}
 }
