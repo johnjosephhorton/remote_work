@@ -18,7 +18,7 @@ suppressPackageStartupMessages({
 # for geo plots
 ratio <- 6/12
 
-df.raw <- read.csv("../etl/gcs-apr4.csv",
+df.raw <- read.csv("../etl/gcs-apr5.csv",
                    stringsAsFactors = FALSE) 
 
 colnames(df.raw) <- c("id", "time", "status", "pub_cat",
@@ -196,7 +196,7 @@ g <- ggplot(data = df.working.gender, aes(x = gender, y = frac, group = q)) +
     geom_point(position = position_dodge(0.1)) + 
     theme_bw() +
     geom_errorbar(aes(ymin = frac - 2*se, ymax = frac + 2*se), width = 0, position = position_dodge(0.1)) + 
-    geom_text_repel(data = df.working.gender %>% filter(gender == "Male"), aes(label = short.q), xlim = c(2, NA), segment.colour = NA) +
+    geom_text_repel(data = df.working.gender %>% filter(gender == "Male"), aes(label = short.q), xlim = c(2, NA), segment.colour = "red") +
     expand_limits(x = 3) + 
     scale_y_continuous(label = scales::percent_format(accuracy = 1)) +
     xlab("") +
