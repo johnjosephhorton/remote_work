@@ -15,6 +15,11 @@ suppressPackageStartupMessages({
     library(JJHmisc)
 })
 
+#install.packages("usmap")
+
+library(usmap)
+
+
 # for geo plots
 ratio <- 6/12
 
@@ -39,7 +44,7 @@ df.lfpr <- df.raw %>% group_by(state) %>%
 df.working <- df.raw %>% filter(q != "None of the above / Not working for pay")
 
 ## Capture numbers from the analysis for call-out in the writeup 
-addParam <- genParamAdder("../writeup/params.tex")
+addParam <- genParamAdder("../writeup/paramse.tex")
 num.obs <- nrow(df.raw)
 num.obs.working <- nrow(df.working)
 lfpr <- num.obs.working / num.obs
@@ -311,8 +316,14 @@ codes <- list(
 lc.codes <- codes
 names(lc.codes) <- tolower(names(codes))
 
-states_map <- map_data("state")
-states_map$state <- with(states_map, as.character(lc.codes[as.character(region)]))
+states_map <- us_map(regions = "states")
+
+#states_map <- map_data("state")
+#states_map$state <- with(states_map, as.character(lc.codes[as.character(region)]))
+
+states_map$state <- with(states_map, abbr)
+states_map$lat <- with(states_map, y)
+states_map$long <- with(states_map, x)
 
 df.combo <- df.working.state %>% left_join(states_map, by = "state")  %>% filter(q != "Used to work from home, but now I commute")
 
