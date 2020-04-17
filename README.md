@@ -6,7 +6,7 @@ You need one package from John Horton
 
 ```
 > library(devtools)
-> instal_github("johnjosephhorton/JJHmisc") 
+> install_github("johnjosephhorton/JJHmisc") 
 
 ```
 
