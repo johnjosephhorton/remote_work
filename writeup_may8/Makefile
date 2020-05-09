@@ -10,6 +10,7 @@ install_packages: package_list.txt
 
 # hacky workaround until I refactor eda.R
 media.txt: ../analysis/eda.R
+	chmod +x ../analysis/eda.R
 	cd ../analysis && ./eda.R
 	touch media.txt
 
