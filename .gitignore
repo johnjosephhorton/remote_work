@@ -26,4 +26,3 @@ forex
 raw
 transformed
 etl/tables/*
-!writeup_may8/plots
