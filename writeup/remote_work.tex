@@ -69,17 +69,15 @@
   Of those employed four weeks earlier, \WFH{}\% report they were commuting and are now working from home.
   In addition, \LaidOff{}\% report being laid-off or furloughed in the last 4 weeks.   
   %The percentage already working from home pre-\covid{} is \alreadyWFH{}\% (95\% CI is [\alreadyWFHLB,\alreadyWFHUB]). 
-  There is a strong negative relationship between the fraction in a state still commuting to work and the fraction working from home which suggests that many workers currently commuting could be converted to remote workers.  We find that the share of people switching to remote work can be predicted  by the incidence of \covid{} and that younger people were more likely to switch to remote work.
-  Furthermore, using data on state unemployment insurance (UI) claims, we find that states with higher fractions of remote workers have higher-than-expected UI claims.
+  There is a strong negative relationship between the fraction in a state still commuting to work and the fraction working from home which suggests that many workers currently commuting could be converted to remote workers.  We find that the share of people switching to remote work can be predicted  by the incidence of \covid{} and that younger people were more likely to switch to remote work.  States with a higher share of employment in management, professional and related occupations were more likely to experience large shifts toward working from home and had fewer people laid off or furloughed.
+  Furthermore, using data on state unemployment insurance (UI) claims, we find that states with higher fractions of remote workers have higher-than-expected UI claims. A prior version of the survey ran from April 1-5, 2020, and we find no substantial change in results between the two waves, suggesting that most changes to remote work manifested by early April.
   \newline 
 \end{abstract} 
 
 \onehalfspacing 
 
 \section{Introduction}
-The on-going \covid{} pandemic has confined large numbers of people to their homes via quarantines and shelter-in-place orders.
-Large numbers of businesses are closed and many people are not working remotely
-There have already been enormous and unprecedented increases in workers filing unemployment insurance claims \citep{goldsmith2020}. 
+The on-going \covid{} pandemic is rapidly transforming how, and even whether, people work. It has confined large numbers of people to their homes via quarantines and shelter-in-place orders. Large numbers of businesses are closed and many people are not working remotely. There have already been enormous and unprecedented increases in workers filing unemployment insurance claims \citep{goldsmith2020}. Whether or not any particular set of changes in work and employment lasts beyond the end of the pandemic, it is important to get a sense of where we are now.
 
 To get a real-time sense of how firms and workers are responding, we conducted a survey using Google Consumer Surveys (GCS).\footnote{
 GCS is a relatively low-cost tool for rapidly collecting responses to simple questions \cite{stephens2014hands}, and response representativeness is often comparable to similar alternatives \citep{santoso2016survey, brynjolfsson2019using}.}  We asked a single question:
@@ -97,7 +95,7 @@ with the following response options:
 
 We launched our survey on April 1, 2020 and collected responses until April 5, collecting a total of \numObs{} responses.
 We find that over one third of workers have responded to the pandemic by shifting to remote work, while another 11\% have been laid-off or furloughed.
-There is a great deal of variation across states in the share of people switching to remote work as well the share of people who continue to commute. We find that these can each be predicted by incidence of COVID-19.  We also find that younger people were more likely than older people to switch from commuting to remote work.
+There is a great deal of variation across states in the share of people switching to remote work as well the share of people who continue to commute. We find that these can each be predicted by incidence of COVID-19 as well as the industry composition of the state prior to the crisis' onset.  We also find that younger people were more likely than older people to switch from commuting to remote work.
 
 \section{Results}
 
@@ -111,7 +109,7 @@ The distribution of answers pooled over all respondents is shown in Figure~\ref{
 We can see that the most common response from workers was that they continue to commute, at \stillCommute{}\% (95\% CI is [\stillCommuteLB,\stillCommuteUB]). 
 But the next most common was that they have switched from commuting to working from home. 
 
-The fraction of workers who switched to working from home is about \WFH{}\%.  In addition,  \alreadyWFH{}\% reporting they were already working from home pre-COVID-19.  This suggests nearly half the workforce is now working from home, significantly more than the \cite{dingel2020} estimate of 34\% of people working at home.\footnote{
+The fraction of workers who switched to working from home is about \WFH{}\%.  In addition,  \alreadyWFH{}\% reporting they were already working from home pre-COVID-19.  This suggests nearly half the workforce is now working from home, significantly more than the \cite{dingel2020} estimate of 37\% of people working at home.\footnote{
 Our estimates are broadly consistent with the literature, however there is a relatively wide range of estimates.
 \cite{krantz2019did} uses 2013-2017 American Time Use Survey (ATUS) data to show 20.5\% of workers working from home in some way on an average day.
 However, our question implies working from home all the time.
@@ -238,6 +236,7 @@ We will investigate further in future work.
 \end{minipage}
 \end{figure} 
 
+\subsection{Predictors of across-state variation} \label{sec:predictorsstate}
 The fractions laid-off or furloughed by US State are shown in Figure~\ref{fig:geo_laidoff}.
 
 \begin{figure}
@@ -249,7 +248,6 @@ The fractions laid-off or furloughed by US State are shown in Figure~\ref{fig:ge
     \end{footnotesize}
 \end{minipage}
 \end{figure} 
-
 
 In Figure~\ref{fig:commute_vs_wfh} we plot the fraction of respondents working from home versus the fraction still commuting by US state.
 There is a clear negative relationship, suggesting a fraction of current commuters will likely---or could---transition to work-from-home status.
@@ -271,6 +269,20 @@ Each 10 percentage point increase in the fraction still commuting is associated 
 Table~\ref{tab:remotework} documents how heterogeneity in COVID infection rates (measured as the log of cases per 100,000 individuals\footnote{Data accessed on April 5, 2020 from The New York Times website: https://www.nytimes.com/interactive/2020/us/coronavirus-us-cases.html\#states}) affects switching to remote work or continuing to work from home. Column (1) shows that a 100\% rise in COVID-19 cases per 100k individuals is associated with a 5\% rise in the fraction of workers who switch to working from home. Column (2) shows a similar rise in COVID-19 incidence as predicting a 5.4\% fall in the fraction of those continuing to commute. We would expect these relationships if higher spread is associated with higher responsiveness of government or individuals. Surprisingly, we do not find a strong relationship between our measure of incidence and survey reports of being furloughed or laid-off. These associations are not to be interpreted as causal and future work will explore the causal effect of the pandemic on switches into remote work.
 
 \input{tables/covid_remotework_apr5_formatted}
+
+Tables~\ref{tab:priorremotework} and ~\ref{tab:priorindustry} document how the pre-COVID distribution of economic activity across states predicts shifts into remote work. In Table~\ref{tab:priorremotework} we look at how the pre-COVID share of workers working from home (measured in the 2017 ACS) influences survey responses.  Interestingly, pre-COVID work from home share is not strongly predictive of COVID-induced shares of people working from home or continuing to commute. 
+
+In contrast, Table~\ref{tab:priorindustry} shows not all occupations have been affected equally.  In particular, states with more workers in "management, professional and related occupations" (\cite{krantz2019did}) were more likely to have large shifts into remote work. This is consistent with the classification of these occupations by the Bureau of Labor Statistics as having high potential for working from home. "Columns (1)-(2) show that 1\% rise in the share of workers in these occupations is associated with a 1.1\% rise in those reporting now working from home and 1.1\% decline in those reporting that they continue to commute to work. Column (3) also shows a greater share in these occupations as being associated with a decline in furloughs or layoffs. 
+
+Taken together, these results suggest that places with greater capacity for increasing the amount of working from home are not necessarily places where workers are already working from home.  Instead, the occupation mix is more predictive than prior remote work of the "remote-ability" of the marginal job that is not yet remote.
+
+\input{tables/priorremote_remotework_apr16_2017acs_formatted}
+
+\input{tables/MPR_remotework_apr16_2017acs_formatted}
+
+
+
+\subsection{Impact on UI claims} \label{sec:UI}
 
 A natural question is how these various measures are affecting UI claims by state. 
 In Table~\ref{tab:ui}, we combine our data with that on UI claims from \cite{goldsmith2020}.
@@ -302,9 +314,9 @@ However, not all states have the same ability to process claims, and so there is
 
 
 \subsection{Implications and suggestions for future work}
-These are a set of preliminary analyses of an evolving crisis. We have documented some early shifts in the economy, and it remains to be seen if some of these changes are last beyond the end of the pandemic. For instance, once busineess and individuals invest in the fixed costs of remote work, including technology but perhaps more importantly in developing the necessary human capital and organizational processes, then they may decide to stay with the new methods.  Furthermore, the crisis has forced people to try out new approaches, some of which may be unexpectedly efficient or effective.  In either case, lasting changes from the crisis would be expected.  
+These are a set of preliminary analyses of a rapidly-evolving crisis. We have documented some early shifts in the economy, and it remains to be seen if some of these changes are last beyond the end of the pandemic. For instance, once businesses and individuals invest in the fixed costs of remote work, including technology but perhaps more importantly in developing the necessary human capital and organizational processes, then they may decide to stay with the new methods.  Furthermore, the crisis has forced people to try out new approaches, some of which may be unexpectedly efficient or effective.  In either case, lasting changes from the crisis would be expected.  
 
-Additional work to understand these changes is needed. Future research will address how state-specific occupational distributions will affect the share of labor performed by remote workers, as well as the impact of the occupational distribution on the UI system.  Long term changes may involve not only remote work, but also  the structure of industries and international trade. For example, tasks that can be done by remote workers may be more likely to be off-shored, as distance becomes less relevant. The tasks the comprise many occupations may be unbundled and re-bundled to separate those that require in-person presence at a business from those that can be done remotely.
+Additional work to understand these changes is needed. Future research will address how state-specific occupational distributions will affect the share of labor performed by remote workers, as well as the impact of the occupational distribution on the UI system.  Long term changes may involve not only remote work, but also  the structure of industries and international trade. For example, tasks that can be done by remote workers may be more likely to be off-shored, as distance becomes less relevant. The tasks that comprise many occupations may be unbundled and re-bundled to separate those that require in-person presence at a business from those that can be done remotely.
 
 Critical to those decisions made by employers are the productivity effects of remote work. More evidence is needed to evaluate the productivity changes induced by allowing work from home. Relatedly, what percentage of tasks can be done remotely and how does it vary across professions and industries? Can we also observe (and explain) heterogeneity across states? These task-specific questions will be the focus of our next round of surveys.
 
@@ -321,7 +333,9 @@ For the COVID-19 pandemic in particular, we are also interested in how the disea
 
 
 \section{Conclusion}
-We document some early facts about how the US labor force is responding to COVID-19 pandemic.  In particular, we find that in the past four weeks over one third of the labor force has switched to remote work. The state-level COVID-19 infection rates predict these switches.  If there is hysteresis as people learn new ways to work remotely and businesses reorganize, the pandemic-driven changes may portend more lasting effects on the organization of work.
+We document some early facts about how the US labor force is responding to COVID-19 pandemic.  In particular, we find that in the past four weeks over one third of the labor force has switched to remote work. The state-level COVID-19 infection rates predict these switches. Furthermore, states with more people in management, professional and related occupations were more likely to see large shifts toward working from home and had fewer people laid off or furloughed. 
+
+If there is hysteresis as people learn new ways to work remotely and businesses reorganize, the pandemic-driven changes may portend more lasting effects on the organization of work.
 We will continue to track changes to the nature of remote work, asking how pandemic-induced changes transform workplaces in the short and long-term. \\
 
 \noindent The code and data for this project are here:
