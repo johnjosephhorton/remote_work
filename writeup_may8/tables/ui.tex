@@ -1,38 +1,27 @@
-
-\begin{table}[!htbp] \centering 
-  \caption{Predicting UI claims by state} 
-  \label{tab:ui} 
-\small 
-\begin{tabular}{@{\extracolsep{5pt}}lcccc} 
-\\[-1.8ex]\hline 
-\hline \\[-1.8ex] 
- & \multicolumn{4}{c}{\textit{Dependent variable:}} \\ 
-\cline{2-5} 
-\\[-1.8ex] & \multicolumn{4}{c}{Log state two week UI claims} \\ 
-\\[-1.8ex] & (1) & (2) & (3) & (4)\\ 
-\hline \\[-1.8ex] 
- Log state population & 0.983$^{***}$ & 0.990$^{***}$ & 0.935$^{***}$ & 0.994$^{***}$ \\ 
-  & (0.062) & (0.067) & (0.065) & (0.066) \\ 
-  Still commuting frac. (log) & $-$0.763$^{**}$ &  &  &  \\ 
-  & (0.302) &  &  &  \\ 
-  Now WFH frac. (log) &  & 0.162 &  &  \\ 
-  &  & (0.308) &  &  \\ 
-  Laid-off frac. (log) &  &  & 0.401$^{***}$ &  \\ 
-  &  &  & (0.142) &  \\ 
-  Still WFH (log) &  &  &  & 0.163 \\ 
-  &  &  &  & (0.354) \\ 
-  Constant & $-$4.225$^{***}$ & $-$3.381$^{***}$ & $-$1.768 & $-$3.314$^{***}$ \\ 
-  & (0.977) & (1.119) & (1.145) & (1.228) \\ 
- \hline \\[-1.8ex] 
-Observations & 50 & 50 & 50 & 50 \\ 
-R$^{2}$ & 0.848 & 0.828 & 0.852 & 0.828 \\ 
-Adjusted R$^{2}$ & 0.841 & 0.821 & 0.846 & 0.820 \\ 
-\hline 
-\hline \\[-1.8ex] 
-\end{tabular}
-\\
-\begin{minipage}{1.0 \textwidth}
-{\footnotesize \emph{Notes}:
-\starlanguage}
-\end{minipage}
-\end{table}
+\begin{table}[!htbp] \centering                    \caption{Predicting UI claims by state}                    \label{tab:ui}                  \small                  \begin{tabular}{@{\extracolsep{5pt}}lcccc}                  \\[-1.8ex]\hline                  \hline \\[-1.8ex]                   & \multicolumn{4}{c}{\textit{Dependent variable:}} \\                  \cline{2-5}                  \\[-1.8ex] & \multicolumn{4}{c}{Log state six week UI claims} \\                  \\[-1.8ex] & (1) & (2) & (3) & (4)\\                  \hline \\[-1.8ex]               
+ \\
+[1em]
+Log of state        &       1.012\sym{***}&       1.019\sym{***}&       1.013\sym{***}&       1.125\sym{***}\\
+population          &     (0.035)         &     (0.042)         &     (0.033)         &     (0.061)         \\
+[1em]
+Log of LFPR         &      -0.554         &      -0.492         &       0.249         &       0.154         \\
+                    &     (0.408)         &     (0.499)         &     (0.470)         &     (0.526)         \\
+[1em]
+Still commuting     &      -1.666\sym{***}&                     &                     &                     \\
+frac. (log)         &     (0.473)         &                     &                     &                     \\
+[1em]
+Now WFH frac. (log) &                     &       0.671         &                     &                     \\
+                    &                     &     (0.708)         &                     &                     \\
+[1em]
+Laid-off frac. (log)&                     &                     &       2.940\sym{***}&                     \\
+                    &                     &                     &     (0.673)         &                     \\
+[1em]
+Still WFH (log)     &                     &                     &                     &      -0.004\sym{**} \\
+                    &                     &                     &                     &     (0.002)         \\
+[1em]
+Constant            &      -2.304\sym{***}&      -3.221\sym{***}&      -2.765\sym{***}&      -4.052\sym{***}\\
+                    &     (0.519)         &     (0.788)         &     (0.553)         &     (0.793)         \\
+[1em]
+Observations        &          51         &          51         &          51         &          51         \\
+\(R^{2}\)           &        0.95         &        0.93         &        0.94         &        0.93         \\
+\hline                  \hline \\[-1.8ex]                  \end{tabular}                 \\                 \begin{minipage}{1.0 \textwidth}                 {\footnotesize \emph{Notes}:                 \starlanguage}                 \end{minipage}                 \end{table}
