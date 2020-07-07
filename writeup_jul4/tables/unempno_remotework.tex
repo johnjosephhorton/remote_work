@@ -1,0 +1,29 @@
+\begin{table}[!htbp] \centering                    \caption{Predicting unemployment numbers by state}                    \label{tab:unumber}                  \small                  \begin{tabular}{@{\extracolsep{5pt}}lcccc}                  \\[-1.8ex]\hline                  \hline \\[-1.8ex]                   & \multicolumn{4}{c}{\textit{Dependent variable:}} \\                  \cline{2-5}                  \\[-1.8ex] &
+\multicolumn{4}{c}{Log of unemployed} \\                  \\[-1.8ex] & (1) & (2) & (3) & (4)\\                  \hline \\ [-1.8ex]               
+
+
+
+Log of state               &       0.995\sym{***}&       1.003\sym{***}&       0.983\sym{***}&       1.039\sym{***}\\
+population                   &     (0.029)         &     (0.035)         &     (0.038)         &     (0.070)         \\
+[1em]
+Still commuting     &      -2.122\sym{***}&                     &                     &                     \\
+frac.        &     (0.386)         &                     &                     &                     \\
+[1em]
+Now WFH frac. &                     &       1.329\sym{**} &                     &                     \\
+                    &                     &     (0.619)         &                     &                     \\
+[1em]
+Laid-off frac. &                     &                     &       2.418\sym{***}&                     \\
+                    &                     &                     &     (0.732)         &                     \\
+[1em]
+Still WFH frac.     &                     &                     &                     &      -0.002         \\
+                    &                     &                     &                     &     (0.002)         \\
+
+[1em]
+Constant            &      -1.899\sym{***}&      -3.276\sym{***}&      -2.734\sym{***}&      -3.273\sym{***}\\
+                    &     (0.464)         &     (0.645)         &     (0.581)         &     (0.990)         \\
+
+
+[1em]
+Observations        &          51         &          51         &          51         &          51         \\
+\(R^{2}\)           &        0.96         &        0.94         &        0.94         &        0.93         \\
+\hline                  \hline \\[-1.8ex]                  \end{tabular}                 \\                 \begin{minipage}{1.0 \textwidth}                 {\footnotesize \emph{Notes}:                 \starlanguage}                 \end{minipage}                 \end{table}
