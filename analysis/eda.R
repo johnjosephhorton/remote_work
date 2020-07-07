@@ -19,32 +19,44 @@ suppressPackageStartupMessages({
 
 library(usmap)
 
-
 # for geo plots
 ratio <- 6/12
 
-df.raw <- read.csv("../etl/gcs-apr5.csv",
-                   stringsAsFactors = FALSE) 
+df.raw <- read.csv("../etl/gcs-jul4.csv",
+                   stringsAsFactors = FALSE)
 
 colnames(df.raw) <- c("id", "time", "status", "pub_cat",
                       "gender", "age", "geo", "weight", "q", "response_time")
 
 
-## Add geograph information 
+## Add geograph information
 r <- sapply(df.raw$geo, function(x) as.vector(strsplit(x, split = "-")))
 df.raw$region <- unlist(lapply(r, function(x) x[2]))
 df.raw$state <- unlist(lapply(r, function(x) x[3]))
 
 
+#### HYTY CODE INJECT FOR INTERMED DATA EXPORT
+## Export Lightly Processed CSV with States
+write.csv(df.raw,'../etl/gcs-jul4_w_states.csv')
+
+## Add UI Data from Feb-March
+df_UI <- read.csv("../etl/LAUS-wStateAbbrevs-May2020.csv",
+                   stringsAsFactors = FALSE)
+
+joined_df <- merge(df.raw, df_UI, by.x = "state",
+                       by.y = "State.Abbrev", all.x = TRUE, all.y = FALSE)
+    write.csv(joined_df,'../etl/gcs-jul4_w_stateUI.csv')
+### END OF HYTY CODE INJECT
+
+
 df.lfpr <- df.raw %>% group_by(state) %>%
     summarise(lfpr = mean(q != "None of the above / Not working for pay"))
 
-
-## Separate out workers that are out of the labor force 
+## Separate out workers that are out of the labor force
 df.working <- df.raw %>% filter(q != "None of the above / Not working for pay")
 
-## Capture numbers from the analysis for call-out in the writeup 
-addParam <- genParamAdder("../writeup/paramse.tex")
+## Capture numbers from the analysis for call-out in the writeup
+addParam <- genParamAdder("../writeup_jul4/params.tex")
 num.obs <- nrow(df.raw)
 num.obs.working <- nrow(df.working)
 lfpr <- num.obs.working / num.obs
@@ -58,7 +70,7 @@ addParam("\\SurveyEnd", df.raw %$% time %>% max %>% as.Date %>% as.character)
 
 
 ########################################
-## Any evidence of a trend in responses? 
+## Any evidence of a trend in responses?
 ########################################
 
 min.time <- df.raw %$% time %>% min
@@ -66,7 +78,7 @@ df.raw %<>% mutate(t = difftime(time, min.time, units = "days") %>% as.numeric)
 
 ggplot(data = df.raw, aes(x = t,
                           y = as.numeric(I(q == "I have recently been furloughed or laid-off")))) +
-    geom_point() + 
+    geom_point() +
     geom_smooth()
 
 m.laidoff <- lm(I(q == "I have recently been furloughed or laid-off") ~ t, data =df.raw)
@@ -77,7 +89,7 @@ stargazer::stargazer(m.laidoff, m.wfh, data = df.raw, type = "text")
 
 
 ####################
-## Overall responses 
+## Overall responses
 ####################
 
 df.working.summary <- df.working %>%
@@ -86,12 +98,12 @@ df.working.summary <- df.working %>%
               num.obs.wt = sum(weight)) %>%
     ungroup %>%
     mutate(frac = num.obs / sum(num.obs),
-           frac.weighted = num.obs.wt / sum(num.obs.wt)) %>% 
+           frac.weighted = num.obs.wt / sum(num.obs.wt)) %>%
     mutate(se = sqrt(frac * (1-frac))/sqrt(num.obs)) %>%
     mutate(lb = frac - 1.96 * se,
            ub = frac + 1.96*se)
 
-## State LFPR estimates 
+## State LFPR estimates
 
 
 df.working.summary$q <- with(df.working.summary, reorder(q, frac, mean))
@@ -133,28 +145,28 @@ addParam("\\stillCommuteUB", stillCommute["ub"])
 g <- ggplot(data = df.working.summary, aes(y = q, x = frac)) +
     geom_segment(aes(x = 0, y = q, yend = q, xend = frac), colour = "grey") +
     geom_point()  +
-    geom_errorbarh(aes(xmin = frac - 2*se, xmax = frac + 2*se), height = 0.1) + 
+    geom_errorbarh(aes(xmin = frac - 2*se, xmax = frac + 2*se), height = 0.1) +
     theme_bw() +
     xlab("% of working respondents") +
     scale_x_continuous(label = scales::percent_format(accuracy = 1)) +
     ylab("")
 
-JJHmisc::writeImage(g, "working_summary", width = 5, height = 2, path = "../writeup/plots/")
+JJHmisc::writeImage(g, "working_summary", width = 5, height = 2, path = "../writeup_jul4/plots/")
 
 #########
-## By age  
+## By age
 #########
 
 df.working.age <- df.working %>%
-    filter(age != "Unknown") %>% 
+    filter(age != "Unknown") %>%
     group_by(q, age) %>%
     summarise(num.obs = n(),
               num.obs.wt = sum(weight)) %>%
     ungroup %>%
-    group_by(age) %>% 
+    group_by(age) %>%
     mutate(frac = num.obs / sum(num.obs),
            frac.weighted = num.obs.wt / sum(num.obs.wt)
-           ) %>% 
+           ) %>%
     mutate(se = sqrt(frac * (1-frac))/sqrt(num.obs)) %>%
     mutate(lb = frac - 1.96 * se,
            ub = frac + 1.96*se)
@@ -165,49 +177,49 @@ df.working.age$short.q <- with(df.working.age, gsub('(.{1,15})(\\s|$)', '\\1\n',
 g <- ggplot(data = df.working.age %>% filter(q != "Used to work from home, but now I commute"), aes(x = age, y = frac, group = q, colour = factor(q))) +
     geom_point(position = position_dodge(0.3)) +
     geom_line(position = position_dodge(0.3)) +
-    geom_errorbar(aes(ymin = frac - 1.96*se, ymax = frac + 1.96*se), width = 0, position = position_dodge(0.3)) + 
+    geom_errorbar(aes(ymin = frac - 1.96*se, ymax = frac + 1.96*se), width = 0, position = position_dodge(0.3)) +
     geom_text_repel(data = df.working.age %>% filter(age == "65+") %>% filter(q != "Used to work from home, but now I commute"),
                     aes(label = short.q), xlim = c(6.25, NA), segment.colour = NA)  +
-    expand_limits(x = 8) + 
+    expand_limits(x = 8) +
     theme_bw() +
     theme(legend.position = "none") +
     scale_y_continuous(label = scales::percent_format(accuracy = 1)) +
     ylab("% of respondents") +
-    xlab("Age of respondents") 
+    xlab("Age of respondents")
 
 print(g)
 
-JJHmisc::writeImage(g, "by_age", width = 6, height = 4, path = "../writeup/plots/")
+JJHmisc::writeImage(g, "by_age", width = 6, height = 4, path = "../writeup_jul4/plots/")
 
 ############
-## By gender                                         
+## By gender
 ############
 
 ## TODO: call out in text how many are missing.
 
 df.working.gender <- df.working %>%
-    filter(gender != "Unknown") %>% 
+    filter(gender != "Unknown") %>%
     group_by(q, gender) %>%
     summarise(num.obs = n()) %>%
     ungroup %>%
-    group_by(gender) %>% 
-        mutate(frac = num.obs / sum(num.obs)) %>% 
-    mutate(se = sqrt(frac * (1-frac))/sqrt(num.obs)) 
+    group_by(gender) %>%
+        mutate(frac = num.obs / sum(num.obs)) %>%
+    mutate(se = sqrt(frac * (1-frac))/sqrt(num.obs))
 
 df.working.gender$short.q <- with(df.working.gender, gsub('(.{1,15})(\\s|$)', '\\1\n', q))
 
 g <- ggplot(data = df.working.gender, aes(x = gender, y = frac, group = q)) +
     geom_line(position =  position_dodge(0.1), alpha = 0.2) +
-    geom_point(position = position_dodge(0.1)) + 
+    geom_point(position = position_dodge(0.1)) +
     theme_bw() +
-    geom_errorbar(aes(ymin = frac - 2*se, ymax = frac + 2*se), width = 0, position = position_dodge(0.1)) + 
+    geom_errorbar(aes(ymin = frac - 2*se, ymax = frac + 2*se), width = 0, position = position_dodge(0.1)) +
     geom_text_repel(data = df.working.gender %>% filter(gender == "Male"), aes(label = short.q), xlim = c(2, NA), segment.colour = "red") +
-    expand_limits(x = 3) + 
+    expand_limits(x = 3) +
     scale_y_continuous(label = scales::percent_format(accuracy = 1)) +
     xlab("") +
-    ylab("% of respondents") 
+    ylab("% of respondents")
 
-JJHmisc::writeImage(g, "gender", width = 6, height = 5, path = "../writeup/plots/")
+JJHmisc::writeImage(g, "gender", width = 6, height = 5, path = "../writeup_jul4/plots/")
 
 ######################
 ## By geography/region
@@ -216,13 +228,13 @@ JJHmisc::writeImage(g, "gender", width = 6, height = 5, path = "../writeup/plots
 ## TODO: Report fraction missing gender
 
 df.working.region <- df.working %>%
-    filter(region != "NA") %>% 
+    filter(region != "NA") %>%
     group_by(q, region) %>%
     summarise(num.obs = n()) %>%
     ungroup %>%
-    group_by(region) %>% 
-        mutate(frac = num.obs / sum(num.obs)) %>% 
-    mutate(se = sqrt(frac * (1-frac))/sqrt(num.obs)) 
+    group_by(region) %>%
+        mutate(frac = num.obs / sum(num.obs)) %>%
+    mutate(se = sqrt(frac * (1-frac))/sqrt(num.obs))
 
 df.working.region$short.q <- with(df.working.region,
                                   gsub('(.{1,17})(\\s|$)', '\\1\n', q))
@@ -236,26 +248,26 @@ df.working.region$q <- with(df.working.region, reorder(q, frac, mean))
 g <- ggplot(data = df.working.region %>% filter(q != "Used to work from home, but now I commute"),
             aes(x = region, y = frac, group = q)) +
     #geom_line(position =  position_dodge(0.1), alpha = 0.2) +
-    geom_point(position = position_dodge(0.1)) + 
+    geom_point(position = position_dodge(0.1)) +
     theme_bw() +
-    geom_errorbar(aes(ymin = frac - 2*se, ymax = frac + 2*se), width = 0, position = position_dodge(0.1)) + 
-    expand_limits(x = 3) + 
+    geom_errorbar(aes(ymin = frac - 2*se, ymax = frac + 2*se), width = 0, position = position_dodge(0.1)) +
+    expand_limits(x = 3) +
     scale_y_continuous(label = scales::percent_format(accuracy = 1)) +
-    facet_wrap(~short.q, ncol = 2, scale = "free_y") + 
+    facet_wrap(~short.q, ncol = 2, scale = "free_y") +
     xlab("") +
     ylab("% of respondents") +
     theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-JJHmisc::writeImage(g, "region", width = 5, height = 5, path = "../writeup/plots/")
+JJHmisc::writeImage(g, "region", width = 5, height = 5, path = "../writeup_jul4/plots/")
 
 df.working.state <- df.working %>%
-    filter(state != "NA") %>% 
+    filter(state != "NA") %>%
     group_by(q, state) %>%
     summarise(num.obs = n()) %>%
     ungroup %>%
-    group_by(state) %>% 
-        mutate(frac = num.obs / sum(num.obs)) %>% 
-    mutate(se = sqrt(frac * (1-frac))/sqrt(num.obs)) 
+    group_by(state) %>%
+        mutate(frac = num.obs / sum(num.obs)) %>%
+    mutate(se = sqrt(frac * (1-frac))/sqrt(num.obs))
 
 codes <- list(
 "Alabama"="AL",
@@ -328,7 +340,7 @@ states_map$long <- with(states_map, x)
 df.combo <- df.working.state %>% left_join(states_map, by = "state")  %>% filter(q != "Used to work from home, but now I commute")
 
 g <- ggplot(df.combo, aes(long, lat, group = group))+
-    facet_wrap(~q, ncol = 2, scales = "free") + 
+    facet_wrap(~q, ncol = 2, scales = "free") +
     geom_polygon(aes(fill = frac), color = "white")+
     scale_fill_viridis_c(option = "C") +
     theme_bw()
@@ -336,13 +348,13 @@ g <- ggplot(df.combo, aes(long, lat, group = group))+
 
 
 
-JJHmisc::writeImage(g, "geo", width = 8, height = 8*ratio, path = "../writeup/plots/")
+JJHmisc::writeImage(g, "geo", width = 8, height = 8*ratio, path = "../writeup_jul4/plots/")
 
 
 short.name <- list("I continue to commute to work"  = "commute",
-                   "I have recently been furloughed or laid-off" = "laidoff", 
+                   "I have recently been furloughed or laid-off" = "laidoff",
                    "Used to commute, now work from home" = "wfh",
-                   "Used to work from home and still do" = "still_wfh", 
+                   "Used to work from home and still do" = "still_wfh",
                    "Used to work from home, but now I commute" = "now_commute")
 
 
@@ -350,55 +362,55 @@ short.name <- list("I continue to commute to work"  = "commute",
 df.combo <- df.working.state %>%
     left_join(states_map, by = "state")  %>%
     filter(q == "I continue to commute to work")
-        
+
 g <- ggplot(df.combo, aes(long, lat, group = group))+
     geom_polygon(aes(fill = frac), color = "white")+
     scale_fill_viridis_c(option = "C") +
     theme_bw()
 
 JJHmisc::writeImage(g, "geo_still_commuting",
-                            width = 8, height = 8*ratio, path = "../writeup/plots/")
+                            width = 8, height = 8*ratio, path = "../writeup_jul4/plots/")
 
 df.combo <- df.working.state %>%
     left_join(states_map, by = "state")  %>%
     filter(q == "Used to commute, now work from home")
-        
+
 g <- ggplot(df.combo, aes(long, lat, group = group))+
     geom_polygon(aes(fill = frac), color = "white")+
     scale_fill_viridis_c(option = "C") +
     theme_bw()
 
 JJHmisc::writeImage(g, "geo_wfh",
-                            width = 8, height = 8*ratio, path = "../writeup/plots/")
+                            width = 8, height = 8*ratio, path = "../writeup_jul4/plots/")
 
 
 df.combo <- df.working.state %>%
     left_join(states_map, by = "state")  %>%
     filter(q == "I have recently been furloughed or laid-off")
-        
+
 g <- ggplot(df.combo, aes(long, lat, group = group))+
     geom_polygon(aes(fill = frac), color = "white")+
     scale_fill_viridis_c(option = "C") +
     theme_bw()
 
 JJHmisc::writeImage(g, "geo_laidoff",
-                            width = 8, height = 8*ratio, path = "../writeup/plots/")
+                            width = 8, height = 8*ratio, path = "../writeup_jul4/plots/")
 
 
-    
+
 
 
 ############################
-## Merge with State UI data 
+## Merge with State UI data
 ###########################
 
 df.ui.raw <- read.csv("../etl/state_ui.csv", stringsAsFactors = FALSE)[, c(1, 4, 5, 7, 8)]
 colnames(df.ui.raw) <- c("state", "two_week_total", "advance_3_22", "advance_3_15", "updated_3_15")
 
-df.ui <- df.ui.raw %>% 
+df.ui <- df.ui.raw %>%
     melt(id.var = c("state")) %>%
     mutate(value = as.numeric(gsub(",","", value))) %>%
-    as_tibble() %>% 
+    as_tibble() %>%
     reshape2::dcast(state ~ variable)
 
 df.ui$state <- with(df.ui, as.character(codes[as.character(state)]))
@@ -446,7 +458,7 @@ df.reg <- df.state.combo %>% select(state, two_week_total, population, frac, q.s
 m <- lm(wfh ~ commute, data = df.reg)
 
 g <- ggplot(data = df.reg, aes(x = commute, y = wfh)) +
-    geom_point(aes(size = population), alpha = 0.25) + 
+    geom_point(aes(size = population), alpha = 0.25) +
     geom_text_repel(aes(label = state)) +
     theme_bw() +
     scale_x_continuous(label = scales::percent_format(accuracy = 1)) +
@@ -457,7 +469,7 @@ g <- ggplot(data = df.reg, aes(x = commute, y = wfh)) +
     theme(legend.position = "none") +
     geom_smooth(method = "lm")
 
-JJHmisc::writeImage(g, "commute_vs_wfh", width = 6, height = 4, path = "../writeup/plots/")
+JJHmisc::writeImage(g, "commute_vs_wfh", width = 6, height = 4, path = "../writeup_jul4/plots/")
 
 ###############################
 ## How much variance does
@@ -485,21 +497,23 @@ ggplot(data = df.reg, aes(y = state, x = r.hat)) + geom_point()
 
 #stargazer::stargazer(m.commute, m.wfh, m.laidoff, m.still_wfh, type = "text")
 
-out.file <- "../writeup/tables/ui.tex"
+out.file <- "../writeup_jul4/tables/ui.tex"
 sink("/dev/null")
-s <- stargazer::stargazer(m.commute, m.wfh, m.laidoff, m.still_wfh, 
-                          dep.var.labels = c("Log state two week UI claims"), 
-                          covariate.labels = c("Log state population", "Still commuting frac. (log)", "Switch to WFH frac. (log)", "Laid-off frac. (log)", "Still WFH (log)"), 
+s <- stargazer::stargazer(m.commute, m.wfh, m.laidoff, m.still_wfh,
+                          dep.var.labels = c("Log state two week UI claims"),
+                          covariate.labels = c("Log state population", "Still commuting frac. (log)", "Switch to WFH frac. (log)", "Laid-off frac. (log)", "Still WFH (log)"),
                           title = "Predicting UI claims by state",
-                          no.space = TRUE, 
+                          no.space = TRUE,
                           label = "tab:ui",
                           font.size = "small",
-                          omit.stat = c("ser", "f"), 
+                          omit.stat = c("ser", "f"),
                           type = "latex",
                           header = FALSE)
 sink()
 note <- c("\\\\",
           "\\begin{minipage}{1.0 \\textwidth}",
-          "{\\footnotesize \\emph{Notes}: 
+          "{\\footnotesize \\emph{Notes}:
 \\starlanguage}", "\\end{minipage}")
 JJHmisc::AddTableNote(s, out.file, note)
+
+print("eda.R executed without critical errors!")

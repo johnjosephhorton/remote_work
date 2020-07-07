@@ -1,0 +1,40 @@
+
+\begin{table}[!htbp] \centering 
+  \caption{Predicting UI claims by state} 
+  \label{tab:ui} 
+\small 
+\begin{tabular}{@{\extracolsep{5pt}}lcccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{4}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-5} 
+\\[-1.8ex] & \multicolumn{4}{c}{Log state two week UI claims} \\ 
+\\[-1.8ex] & (1) & (2) & (3) & (4)\\ 
+\hline \\[-1.8ex] 
+ Log state population & 0.972$^{***}$ & 0.979$^{***}$ & 1.071$^{***}$ & 0.987$^{***}$ \\ 
+  & (0.070) & (0.065) & (0.078) & (0.072) \\ 
+  Still commuting frac. (log) & $-$0.345 &  &  &  \\ 
+  & (0.287) &  &  &  \\ 
+  Switch to WFH frac. (log) &  & 0.403$^{**}$ &  &  \\ 
+  &  & (0.166) &  &  \\ 
+  Laid-off frac. (log) &  &  & 0.049 &  \\ 
+  &  &  & (0.132) &  \\ 
+  Still WFH (log) &  &  &  & $-$0.171 \\ 
+  &  &  &  & (0.174) \\ 
+  log(lfpr) & 0.378 & 0.356 & 0.807 & 0.666 \\ 
+  & (0.545) & (0.486) & (0.632) & (0.550) \\ 
+  Constant & $-$3.358$^{***}$ & $-$2.642$^{**}$ & $-$4.270$^{***}$ & $-$3.481$^{***}$ \\ 
+  & (1.178) & (1.116) & (1.328) & (1.279) \\ 
+ \hline \\[-1.8ex] 
+Observations & 49 & 50 & 40 & 48 \\ 
+R$^{2}$ & 0.831 & 0.850 & 0.842 & 0.828 \\ 
+Adjusted R$^{2}$ & 0.820 & 0.840 & 0.828 & 0.816 \\ 
+\hline 
+\hline \\[-1.8ex] 
+\end{tabular}
+\\
+\begin{minipage}{1.0 \textwidth}
+{\footnotesize \emph{Notes}:
+\starlanguage}
+\end{minipage}
+\end{table}
