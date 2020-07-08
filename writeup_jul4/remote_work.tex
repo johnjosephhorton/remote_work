@@ -254,19 +254,19 @@ Table~\ref{tab:remotework} documents how heterogeneity in COVID-19 infection rat
 
 Column (2) shows a similar rise in COVID-19 incidence as predicting a 5.4\% fall in the fraction of those continuing to commute in wave 1, and a 2.7\% fall in wave 2. Waves 1 and 2 show substantial consistency, supporting the conclusion that most changes to remote work occurred by the first wave. We would expect these relationships if higher spread is associated with higher responsiveness of government or individuals. Surprisingly, we do not find a strong or statistically significant relationship between our measure of incidence and survey reports of being furloughed or laid-off. These associations are not to be interpreted as causal and future work will explore the causal effect of the pandemic on switches into remote work.
 
-\input{tables/covid_remotework}
+\input{writeup_jul4/tables/covid_remotework_jul4}
 
 Tables~\ref{tab:priorremotework}, ~\ref{tab:priorindustry}, and ~\ref{tab:priorindustrymanuf} document how the pre-COVID distribution of economic activity across states predicts shifts into remote work. In Table~\ref{tab:priorremotework} we look at how the pre-COVID share of workers working from home (measured in the 2017 ACS) influences survey responses.  Interestingly, pre-COVID work from home share is not strongly predictive of COVID-induced shares of people working from home or continuing to commute in either of the two survey waves. 
 
-\input{tables/priorremote_remotework}
+\input{writeup_jul4/tables/priorremote_remotework_jul4}
 
 Table~\ref{tab:priorindustry} shows not all occupations have been affected equally.  In particular, states with more workers in ``management, professional and related occupations" (\cite{krantz2019did}) were more likely to have large shifts into remote work. This is consistent with the classification of these occupations by the Bureau of Labor Statistics as having high potential for working from home. Columns (1)-(2) show that, in the April wave of the survey, a 1\% rise in the share of workers in these occupations is associated with a 1.1\% rise in those reporting now working from home and 1.1\% decline in those reporting that they continue to commute to work. The May wave yields similar numbers at 1.1\% rise in those reporting now working from home and a 0.9\% decline in those continuing to commute. Column (3) also shows a greater share in these occupations as being associated with a decline in furloughs or layoffs. 
 
-\input{tables/MPR_remotework}
+\input{writeup_jul4/tables/MPR_remotework_jul4}
 
 Table~\ref{tab:priorindustrymanuf} shows that prior share in manufacturing employment is not a statistically significant predictor of switches into remote work. However, as expected, the sign of the coefficient is negative. Similarly, pre-COVID-19 manufacturing share positively predicts continuing to commute. This pattern is statistically significantly different from zero in Wave 2 of the survey; a 1\% increase the pre-COVID-19 share of employment in manufacturing is associated with a 0.84\% increase in continuing to commute to work.
 
-\input{tables/manuf_remotework}
+\input{writeup_jul4/tables/manuf_remotework_jul4}
 
 Taken together, these results suggest that places with greater capacity for increasing the amount of working from home are not necessarily places where workers are already working from home.  Instead, the occupation mix is more predictive than prior remote work of the ``remote-ability" of the marginal job that is not yet remote. Of course, these estimates are especially relevant for short-run adjustments that workers and their employers can make. The longer term capacity to rely on remote work and associated hysteresis in employment patterns will take months to years to make accurate measurement possible.
 
@@ -276,7 +276,7 @@ A natural question is how these various measures vary with unemployment and UI c
 
 Column (1) of Table~\ref{tab:urate} finds that a 1\%  rise in the fraction of those still commuting to work is associated with 0.18\% fall in unemployment rate. Column (2) finds a similar negative albeit not statistically significant relationship between working from home and the unemployment rate. Column (3) shows that a 1\% rise in survey reports of being unemployed or laid off is associated with a 0.53\% rise in the unemployment rate.  
 
-\input{tables/unemprate_remotework}
+\input{writeup_jul4/tables/unemprate_remotework}
 
 Since COVID may have lowered the intensity of unemployed individuals' search activity, causing BLS to under-report COVID-driven layoffs, we repeat the above exercise with the dependent variable being the negative of the change in employed individuals (using payroll) between February and April 2020, i.e. additions to unemployment from payroll between February and April 2020. Unsurprisingly, across all specifications, the state population explains a great deal of the variation in unemployment. We are interested in asking whether our survey measures account for some of the residual variation. 
 
@@ -288,7 +288,7 @@ In Column~(2), the greater the fraction that reports working from home, the \emp
 
 Column~(3), which includes a direct measure of reported lay-offs is positive and significant, but lower than expected in magnitude. Our expectation is that the elasticity of log of unemployment to the fraction laid-off should be 1. This discrepancy might be driven by survey respondents reporting ``None of the above / Not working for pay" instead of ``I have recently been furloughed or laid-off''.
 
-\input{tables/unempno_remotework}
+\input{writeup_jul4/tables/unempno_remotework}
 
 Finally, in Table~\ref{tab:ui}, we combine our data with that on UI claims from the Bureau of Labor Statistics. We regress the log of the UI claims in a state from mid-March till the end of April on the state's population and the state-specific fraction for each of the response possibilities.  
 
@@ -297,7 +297,7 @@ In the regressions in Table~\ref{tab:ui}, we use a state-specific employment rat
 
 Columns 1-3 of Table~\ref{tab:ui} reveal patterns remarkably similar to Tables~\ref{tab:urate} and ~\ref{tab:unumber} above. The higher the fraction reporting still commuting, the lower the UI claims for that state. The greater the fraction that reports working from home, the \emph{higher} the UI claims. The higher the reported layoff response, the higher the UI claims.
 
-\input{tables/ui.tex}
+\input{writeup_jul4/tables/ui.tex}
 
 Taken together, these findings suggest that workers who would otherwise be continuing to commute to work are splitting into (a) work-from-home or (b) becoming unemployed and filing for UI.
 
@@ -313,7 +313,9 @@ Survey responses between the first wave (April 1-5) and second wave (May 2-8) of
 
 To gauge whether changes in employment are dynamically responding to the COVID-19 crisis, we regress state-level changes in survey responses across the two survey waves on changes in state-level COVID-19 incidence. Table~\ref{tab:deltacovid} reports results. Column (1) reveals that the \textit{change} in COVID-19 incidence is mildly predictive of \textit{changes} in switches into remote work. A 1 point change in log of COVID-19 cases per 100,000 individuals between April and May increases switches into remote work during this period by 2\%. Change in COVID-19 incidence does not, however, appear to affect either continuing to commute or layoffs and furloughs.
 
-\input{tables/deltacovid_deltaremotework}
+\input{writeup_jul4/tables/deltacovid_deltaremotework_may8tojul4}
+
+\input{writeup_jul4/tables/switches_jul}
 
 \subsection{Implications and suggestions for future work}
 These are a set of preliminary analyses of a rapidly-evolving crisis. We have documented some early shifts in the economy, and it remains to be seen if some of these changes are last beyond the end of the pandemic. For instance, once businesses and individuals invest in the fixed costs of remote work, including technology but perhaps more importantly in developing the necessary human capital and organizational processes, then they may decide to stay with the new methods.  
