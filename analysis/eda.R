@@ -13,6 +13,7 @@ suppressPackageStartupMessages({
     library(reshape2)
     library(scales)
     library(JJHmisc)
+    library(stargazer)
 })
 
 #install.packages("usmap")
